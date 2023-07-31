@@ -1,28 +1,41 @@
 <div class="min-h-full">
     <div class="resume-box p-4 border-0 border-slate-400">
-        <h1 class="text-4xl font-bold mt-2">Sirawit Mahanin 👦🏻</h1>
-        <h2 class="mt-2 text-lg">{{myAge.years}} years {{myAge.months}} months {{myAge.days}} days old Thai.</h2>
-        <p class="mt-2 text-lg">Sukhumvit 62, Bangkok 10260. sirawit.mn@gmail.com | (+66) 64 002 2069</p>
-        <div class="flex justify-start gap-6 mt-2 text-base">
+
+        <section id="header" class="flex justify-between">
             <div>
-                <i class="fab fa-linkedin" style="font-size: 20px;"></i>
-                <a class="underline ml-1" href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a>
+                <h1 class="text-4xl font-bold mt-2">Sirawit Mahanin</h1>
+                <h2 class="mt-2 text-lg">🇹🇭 Thai, {{myAge.years}} years {{myAge.months}} months {{myAge.days}} days
+                    old.
+                </h2>
+                <p class="mt-2 text-lg">Sukhumvit 62, Bangkok 10260. sirawit.mn@gmail.com</p>
+                <div class="flex justify-start gap-6 mt-2 text-base">
+                    <div>
+                        <i class="fab fa-linkedin" style="font-size: 20px;"></i>
+                        <a class="underline ml-1"
+                            href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a>
+                    </div>
+                    <div>
+                        <i class="fab fa-github" style="font-size: 20px;"></i>
+                        <a class="underline ml-1" href="https://github.com/manooi">GitHub</a>
+                    </div>
+                </div>
             </div>
-            <div>
-                <i class="fab fa-github" style="font-size: 20px;"></i>
-                <a class="underline ml-1" href="https://github.com/manooi">GitHub</a>
+            <div class="hidden md:block">
+                <img class="rounded-lg" style="width: 225px;" src="/assets/profile.jpg">
             </div>
-        </div>
+        </section>
+
         <hr class="mt-5">
 
         <section>
-            <h2 class="text-xl underline mt-6 font-bold mb-3">Technical Skills</h2>
+            <h2 class="text-xl text-center underline mt-4 font-bold mb-3">Technical Skills</h2>
 
             <h3 class="font-bold">Frontend</h3>
             <p class="ml-9"></p>
             <ul class="list-disc ml-12">
                 <li>Sound knowledge of JavaScript, TypeScript, rxjs, and Angular.</li>
                 <li>Comfortable with UI libraries such as PrimeNg, Bootstrap, and MaterialUI.</li>
+                <li>Learning tailwind.</li>
             </ul>
 
             <h3 class="font-bold mt-2">Backend</h3>
@@ -49,22 +62,24 @@
                 <li>Able to set up a basic VM instance, install a web server, configure a firewall, and the like.</li>
             </ul>
 
-            <h3 class="font-bold mt-2">Machine Learning, Image Analytics, and Deep Learning</h3>
-            <p><span class="underline">Disclaimer:</span> These are what I learned from my M.S., never used in
-                production work and i'm kind of forgetting it.</p>
-            <ul class="list-disc ml-12">
-                <li>Trained, developed, and deployed various machine learning models.</li>
+            <!-- <h3 class="font-bold mt-2">Machine Learning, Image Analytics, and Deep Learning</h3>
+            <app-accordian [class]="'mt-1'" [header]="'Click for more details'">
+                <p><span class="underline">Disclaimer:</span> These are what I learned from my M.S., never used in
+                    production work and i'm kind of forgetting it.</p>
                 <ul class="list-disc ml-12">
-                    <li>Linear and logistic regression, KNN, K-Means, Decision Tree, NN, SVM, and PCA.</li>
-                    <li>Comfortable with library such as scikit-learn, NumPy, pandas, and matplotlib.</li>
+                    <li>Trained, developed, and deployed various machine learning models.</li>
+                    <ul class="list-disc ml-12">
+                        <li>Linear and logistic regression, KNN, K-Means, Decision Tree, NN, SVM, and PCA.</li>
+                        <li>Comfortable with library such as scikit-learn, NumPy, pandas, and matplotlib.</li>
+                    </ul>
+                    <li>Deep Learning / Image Analytics.</li>
+                    <ul class="list-disc ml-12">
+                        <li>Trained deep learning models such as CNN, RNN, and GANs.</li>
+                        <li>Hands-on experience in PyTorch and TensorFlow.</li>
+                        <li>Coconut thief detection project with object detector model.</li>
+                    </ul>
                 </ul>
-                <li>Deep Learning / Image Analytics.</li>
-                <ul class="list-disc ml-12">
-                    <li>Trained deep learning models such as CNN, RNN, and GANs.</li>
-                    <li>Hands-on experience in PyTorch and TensorFlow.</li>
-                    <li>Coconut thief detection project with object detector model.</li>
-                </ul>
-            </ul>
+            </app-accordian> -->
 
             <h3 class="font-bold mt-2">Others</h3>
             <ul class="list-disc ml-12">
@@ -73,21 +88,21 @@
             </ul>
         </section>
 
-        <div class="bg-slate-600 h-2 mt-6 mb-6 rounded"></div>
+        <hr class="mt-5">
 
         <section>
-            <h2 class="text-xl underline font-bold mb-6">Professional Experience</h2>
+            <h2 class="text-xl text-center underline font-bold mt-4">Professional Experience</h2>
 
             <!-- Job3 -->
             <img class="h-7" src="/assets/itone-logo.png">
             <div class="flex justify-between">
                 <h3 class="text-lg font-bold">ITOne Co., Ltd.</h3>
-                <h3 class="text-base">Oct 2021 - Present</h3>
+                <h3 class="text-base">Oct 2021 - Present ✅</h3>
             </div>
             <p class="mb-2 font-semibold italic">Analyst</p>
 
             <ul class="list-disc ml-12">
-                <p class="font-bold">Dev lead</p>
+                <p class="font-bold">As dev lead:-</p>
                 <li class="ml-8">Mentored junior developers, fostering a collaborative learning environment and
                     enhancing team
                     productivity.</li>
@@ -98,12 +113,12 @@
             </ul>
 
             <ul class="list-disc ml-12">
-                <p class="mt-2 font-bold">Full-stack dev</p>
+                <p class="mt-2 font-bold">As full-stack dev:-</p>
                 <li class="ml-8">Developed web applications using Angular. Reactive programming with rxjs.</li>
                 <li class="ml-8">Developed API with .NET 6, AWS Lambda and most recently with NestJS.</li>
             </ul>
 
-            <ul class="list-decimal ml-12">
+            <ul class="list-disc ml-12">
                 <p class="mt-2 font-bold">Overview of each project I involed, mostly web applications:-</p>
                 <li class="ml-8">Led in the development of resource planning web application that involves uploading and
                     downloading Excel files.
@@ -132,9 +147,6 @@
                 </li>
             </ul>
 
-
-            <hr class="mt-3">
-
             <!-- Job2 -->
             <img class="h-7 mt-6" src="/assets/wal-logo.png">
             <div class="flex justify-between">
@@ -152,8 +164,6 @@
                     interior works.</li>
             </ul>
 
-            <hr class="mt-3">
-
             <!-- Job1 -->
             <img class="h-6 mt-6" src="/assets/aecom-icon.png">
             <div class="flex justify-between">
@@ -163,10 +173,10 @@
             <p class="mb-2 font-bold italic">Cost Engineer</p>
         </section>
 
-        <div class="bg-slate-600 h-2 mt-6 mb-6 rounded"></div>
+        <hr class="mt-3">
 
         <section>
-            <h2 class="text-xl underline font-bold mb-2">Education</h2>
+            <h2 class="text-xl text-center underline font-bold mt-4 mb-3">Education</h2>
             <ul class="list-disc ml-12">
                 <li>M.S. (Computer Science and Information Systems) – NIDA | 2019 – 2023</li>
                 <li>B.Eng. (Civil Engineering) – Chulalongkorn University | 2013 – 2017</li>

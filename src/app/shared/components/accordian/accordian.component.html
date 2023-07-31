@@ -1,12 +1,12 @@
-<div class="w-full max-w-full">
+<div class="w-full max-w-full" [ngClass]="class">
     <div class="flex flex-col">
         <div class="border rounded-sm mb-1">
-            <button class="flex justify-between w-full px-4 py-1 font-medium text-left bg-slate-100"
+            <button class="flex justify-between w-full px-1 py-1 font-medium text-left bg-slate-100"
                 (click)="toggleAccordian()">
                 {{header}}
-                <span class="transform rotate-0">&#43;</span>
+                <span>&#43;</span>
             </button>
-            <div [ngClass]="isShowAccordians ? '' : 'hidden px-4 py-2'">
+            <div [ngClass]="isShowAccordians ? '' : 'hidden py-2'">
                 <p class="p-2">
                     <ng-content></ng-content>
                 </p>

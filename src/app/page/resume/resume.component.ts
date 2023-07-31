@@ -15,7 +15,7 @@ export class ResumeComponent {
 
   getAge(): { years: number, months: number, days: number } {
     const today: Date = new Date();
-    const birth: Date = new Date('1994-10-11');
+    const birth: Date = new Date('1994-11-10');
 
     let years: number = today.getFullYear() - birth.getFullYear();
     let months: number = today.getMonth() - birth.getMonth();

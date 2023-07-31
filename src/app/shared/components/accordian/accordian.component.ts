@@ -7,7 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AccordianComponent implements OnInit {
   @Input() header: string = "";
-  isShowAccordians: boolean = true;
+  @Input() isShowAccordians: boolean = false;
+  @Input() class: string = "";
 
   ngOnInit(): void {
   }
