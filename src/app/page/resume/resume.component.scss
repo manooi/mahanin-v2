@@ -1,0 +1,14 @@
+// Everything 
+.resume-box {
+    margin-left: 25%;
+    margin-right: 25%;
+    // background-color: rgb(236, 232, 232);
+}
+
+// Anything less than this
+@media (max-width: 1200px) {
+    .resume-box {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
