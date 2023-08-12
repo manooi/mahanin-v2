@@ -1,0 +1,20 @@
+<div class="flex justify-center items-center h-screen bg-gray-100">
+  <div class="p-8 bg-white rounded shadow-md">
+    <h2 class="text-2xl mb-4 font-extrabold">Mahanin Home</h2>
+    <div class="mb-4 flex items-center">
+      <p class="text-lg mr-2"><strong>Temp:</strong></p>
+      <p class="text-3xl font-semibold text-blue-600">{{ measurements.temperature }} °C</p>
+      <i class="fas fa-thermometer-half ml-2 text-blue-600 text-2xl"></i>
+    </div>
+    <div class="mb-4 flex items-center">
+      <p class="text-lg mr-2"><strong>Humid:</strong></p>
+      <p class="text-3xl font-semibold text-green-600">{{ measurements.humidity }}%</p>
+      <i class="fas fa-tint ml-2 text-green-600 text-2xl"></i>
+    </div>
+    <div class="flex items-center">
+      <p class="text-lg mr-2"><strong>Feels like:</strong></p>
+      <p class="text-3xl font-semibold text-yellow-500">{{ measurements.heatIndex }}%</p>
+      <i class="fas fa-thermometer ml-2 text-2xl text-yellow-500"></i>
+    </div>
+  </div>
+</div>
