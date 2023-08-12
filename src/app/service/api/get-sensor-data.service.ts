@@ -14,6 +14,6 @@ export class GetSensorDataService {
     }
 
     getMeasurements() {
-        return this.http.get<Measurements>('http://souperwit.3bbddns.com:37592/get-measurements');
+        return this.http.get<Measurements>('https://o7yeeof7g0.execute-api.ap-southeast-1.amazonaws.com/test/get-measurements');
     }
 }
