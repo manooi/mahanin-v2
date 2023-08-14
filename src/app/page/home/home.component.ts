@@ -26,9 +26,7 @@ export class HomeComponent implements OnInit {
   private fetchData() {
     this.getSensorDataService.getMeasurements().subscribe({
       next: (value) => {
-        this.measurements.temperature = parseFloat(value.temperature.toFixed(2));
-        this.measurements.humidity = parseFloat(value.humidity.toFixed(2));
-        this.measurements.heatIndex = parseFloat(value.heatIndex.toFixed(2));
+        this.measurements = value;
       }
     });
   }
