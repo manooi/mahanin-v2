@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './page/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StepperComponent } from './shared/components/stepper/stepper.component';
+import { VStepperComponent } from './shared/components/v-stepper/v-stepper.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { StepperComponent } from './shared/components/stepper/stepper.component'
     AccordianComponent,
     HomeComponent,
     StepperComponent,
+    VStepperComponent,
   ],
   imports: [
     BrowserModule,

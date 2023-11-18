@@ -1,0 +1,42 @@
+$node-diameter: 0.9rem;
+$line-width: 2.5px;
+$spacing: 5px;
+
+.v-stepper {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-stepper__item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    // border: 1px solid black;
+}
+
+.v-stepper__item:not(:last-child) {
+    padding-bottom: 1rem;
+}
+
+.v-stepper__item:before {
+    content: "";
+    position: relative;
+    z-index: 1;
+    flex-basis: $node-diameter;
+    height: $node-diameter;
+    border-radius: 50%;
+    background-color: lightgrey;
+}
+
+.v-stepper__item:not(:last-child):after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc($node-diameter + $spacing);
+    bottom: 0;
+    transform: translateX(calc($node-diameter/2 - $line-width/2));
+    width: $line-width;
+    height: calc(100% - $node-diameter - 2 * $spacing );
+    background-color: lightgray;
+    // z-index: 999;
+}
