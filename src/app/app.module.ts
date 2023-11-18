@@ -7,6 +7,7 @@ import { AccordianComponent } from './shared/components/accordian/accordian.comp
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './page/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
+import { StepperComponent } from './shared/components/stepper/stepper.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
     ResumeComponent,
     AccordianComponent,
     HomeComponent,
+    StepperComponent,
   ],
   imports: [
     BrowserModule,

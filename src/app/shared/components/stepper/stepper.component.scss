@@ -1,0 +1,40 @@
+$node-diameter: 20px;
+$node-radius: $node-diameter/2;
+$line-spacing: 8px;
+
+.c-stepper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.c-stepper__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.c-stepper__item:before {
+    content: "";
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: $node-diameter;
+    height: $node-diameter;
+    border-radius: 50%;
+    margin: 10px auto;
+    background-color: rgb(198, 198, 198);
+}
+
+.c-stepper__item:not(:last-child):after {
+    content: "";
+    position: relative;
+    top: 20px;
+    left: calc(50% + $node-radius + $line-spacing);
+    width: calc(100% - $node-diameter - 2 * $line-spacing );
+    height: 2px;
+    background-color: #b1abab;
+    order: -1;
+    // z-index: 9999;
+}
