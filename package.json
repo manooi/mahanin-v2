@@ -1,0 +1,12 @@
+{
+  "name": "mahanin",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./styles/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./styles/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
