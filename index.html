@@ -1,12 +1,24 @@
-<div class="min-h-full">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mahanin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="min-h-full">
     <div class="resume-box p-4 border-0 border-slate-400">
 
         <section id="header" class="flex justify-between">
             <div>
                 <h1 class="text-4xl font-bold mt-2">Sirawit Mahanin</h1>
-                <h2 class="mt-2 text-lg">🇹🇭 Thai, {{myAge.years}} years {{myAge.months}} months {{myAge.days}} days
-                    old.
-                </h2>
+                <h2 class="mt-2 text-lg" id="age">🇹🇭 Thai, calculating age...</h2>
                 <p class="mt-2 text-lg">Sukhumvit 62, Bangkok 10260. 📧 sirawit@mahanin.com</p>
                 <div class="flex justify-start gap-6 mt-2 text-base">
                     <div>
@@ -21,7 +33,7 @@
                 </div>
             </div>
             <div class="hidden md:block">
-                <img class="rounded-lg" style="width: 225px;" src="/assets/profile.jpg">
+                <img class="rounded-lg" style="width: 225px;" src="assets/profile.jpg">
             </div>
         </section>
 
@@ -108,7 +120,6 @@
                         href="https://learn.microsoft.com/en-us/users/sirawitmahanin-8091/transcript/71zkyuyl4qrzyy2?wt.mc_id=certnurture_eml14_email_wwl">Azure AZ900</a>, and GCP.</li>
                 <li>ITIL4 Foundation <a class="underline text-blue-700"
                         href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">certificate.</a></li>
-                <!-- <li>Able to set up a basic VM instance, install a web server, configure a firewall, and the like.</li> -->
                 <li>Docker <i class="fa-brands fa-docker"></i>.</li>
             </ul>
 
@@ -133,7 +144,7 @@
             <h2 class="text-xl text-center underline font-bold mt-4">Professional Experience</h2>
 
             <!-- Job3 -->
-            <img class="h-7 mt-6" src="/assets/tw.png">
+            <img class="h-7 mt-6" src="assets/tw.png">
             <div class="flex justify-between">
                 <h3 class="text-lg font-bold">Thoughtworks Thailand Co., Ltd
                 </h3>
@@ -147,7 +158,7 @@
             </ul>
 
             <!-- Job3 -->
-            <img class="h-7 mt-6" src="/assets/itone-logo.png">
+            <img class="h-7 mt-6" src="assets/itone-logo.png">
             <div class="flex justify-between">
                 <h3 class="text-lg font-bold">ITOne Co., Ltd.</h3>
                 <h3 class="text-base">Oct 2021 - Dec 2024</h3>
@@ -161,7 +172,7 @@
                                 Sr. Analyst
                             </p>
                             <p class="text-sm">
-                                Dec 2023 - Present
+                                Dec 2023 - Dec 2024
                             </p>
                         </div>
                         <ul class="list-disc ml-12">
@@ -177,7 +188,6 @@
                             <li class="sm:ml-0 md:ml-8">Estimated efforts and provided solutions to client's service
                                 requests.
                             </li>
-                            <!-- <li class="sm:ml-0 md:ml-8">Documented API with swagger and markup language.</li> -->
                         </ul>
                     </li>
 
@@ -244,7 +254,7 @@
             </div>
 
             <!-- Job2 -->
-            <img class="h-7 mt-6" src="/assets/wal-logo.png">
+            <img class="h-7 mt-6" src="assets/wal-logo.png">
             <div class="flex justify-between">
                 <h3 class="text-lg font-bold">WAL Consultant Co., Ltd.</h3>
                 <h3 class="text-base">Aug 2018 - May 2021</h3>
@@ -261,7 +271,7 @@
             </ul>
 
             <!-- Job1 -->
-            <img class="h-6 mt-6" src="/assets/aecom-icon.png">
+            <img class="h-6 mt-6" src="assets/aecom-icon.png">
             <div class="flex justify-between">
                 <h3 class="text-lg font-semibold">Aecom Cost Consulting (Thailand) Co., Ltd.</h3>
                 <h3 class="text-base">Oct 2017 - Jun 2018</h3>
@@ -274,9 +284,42 @@
         <section id="education">
             <h2 class="text-xl text-center underline font-bold mt-4 mb-3">Education</h2>
             <ul class="list-disc ml-12">
-                <li>M.S. (Computer Science and Information Systems) – NIDA | 2019 – 2023</li>
+                <li>M.S. (Computer Science and Information Systems) - NIDA | 2019 – 2023</li>
                 <li>B.Eng. (Civil Engineering) – Chulalongkorn University | 2013 – 2017</li>
             </ul>
         </section>
     </div>
-</div>
+  </div>
+
+  <script>
+    function getAge() {
+      const today = new Date();
+      const birth = new Date('1994-11-10');
+
+      let years = today.getFullYear() - birth.getFullYear();
+      let months = today.getMonth() - birth.getMonth();
+      let days = today.getDate() - birth.getDate();
+
+      if (months < 0 || (months === 0 && days < 0)) {
+        years--;
+        months += 12;
+      }
+
+      if (days < 0) {
+        const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, birth.getDate());
+        const diffMs = today.getTime() - prevMonth.getTime();
+        days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      }
+
+      return {
+        years: years,
+        months: months,
+        days: days,
+      };
+    }
+
+    const myAge = getAge();
+    document.getElementById('age').textContent = `🇹🇭 Thai, ${myAge.years} years ${myAge.months} months ${myAge.days} days old.`;
+  </script>
+</body>
+</html>

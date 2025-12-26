@@ -1,3 +1,3 @@
 # Mahanin
 
-My resume web app built with Angular. Visit https://mahanin.com.
+My resume website. Visit https://mahanin.com.
