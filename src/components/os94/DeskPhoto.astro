@@ -1,0 +1,34 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  w?: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+  rotate?: number;
+}
+
+const { src, alt, width, height, w = 132, top, right, bottom, left, rotate = -2.5 } = Astro.props;
+
+// Geometry lives at the call site, same rule as <Window>, <StickyNote> and <GhostIcon>.
+const sides: Record<string, number | undefined> = { '--top': top, '--right': right, '--bottom': bottom, '--left': left };
+const style = [
+  ...Object.entries(sides).filter(([, v]) => v !== undefined).map(([k, v]) => `${k}:${v}px`),
+  `--w:${w}px`,
+  `--rot:${rotate}deg`,
+].join(';');
+---
+{/* A printed photo lying on the desktop, draggable. It opts into pointer-events (invariant
+    8) because it is the one piece of scenery you can pick up. The sides passed above hold
+    it until it is first dragged, at which point os94.js writes --x/--y and .is-dragged
+    switches it to left/top — anchoring to the right edge is what keeps it in the corner on
+    any viewport, but you cannot add a drag delta to `right` and have it move the way the
+    cursor does. draggable="false" is load-bearing: without it the browser's own image drag
+    takes over and starts a ghost-image drop instead. */}
+<div class="desk-photo" style={style}>
+  <img src={src} alt={alt} width={width} height={height} draggable="false" loading="lazy" decoding="async" />
+</div>

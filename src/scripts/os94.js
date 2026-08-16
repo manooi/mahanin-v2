@@ -157,20 +157,15 @@ function renderTaskbar() {
 
 // --- Drag -------------------------------------------------------------
 
-function startDrag(win, e) {
+// Shared pointer plumbing for both draggables: capture the press point, hand every move to
+// `apply` as a delta from it, and unbind on release.
+function trackDrag(e, apply) {
   e.preventDefault();
-  const id = win.dataset.win;
-  focusWin(id);
   const startX = e.clientX;
   const startY = e.clientY;
-  const originX = readVar(win, '--x', 0);
-  const originY = readVar(win, '--y', 0);
 
   function onMove(ev) {
-    const nx = Math.max(0, Math.min(originX + ev.clientX - startX, window.innerWidth - 70));
-    const ny = Math.max(0, Math.min(originY + ev.clientY - startY, window.innerHeight - 90));
-    setVarPx(win, '--x', nx);
-    setVarPx(win, '--y', ny);
+    apply(ev.clientX - startX, ev.clientY - startY);
   }
   function onUp() {
     document.removeEventListener('mousemove', onMove);
@@ -178,6 +173,42 @@ function startDrag(win, e) {
   }
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
+}
+
+function startDrag(win, e) {
+  focusWin(win.dataset.win);
+  const originX = readVar(win, '--x', 0);
+  const originY = readVar(win, '--y', 0);
+  trackDrag(e, (dx, dy) => {
+    setVarPx(win, '--x', clamp(originX + dx, 0, window.innerWidth - 70));
+    setVarPx(win, '--y', clamp(originY + dy, 0, window.innerHeight - 90));
+  });
+}
+
+// The desk photo is anchored by top/right in CSS so it holds the corner on any viewport,
+// but a delta cannot be added to `right` and move with the cursor. On the first press,
+// convert that anchor to left/top once and switch the element over.
+function startPhotoDrag(photo, e) {
+  const box = photo.offsetParent;
+  if (!box) return;
+
+  if (!photo.classList.contains('is-dragged')) {
+    // offsetLeft/offsetTop, not getBoundingClientRect: the photo is rotated, and a client
+    // rect is the *rotated* bounding box — wider than the element and offset from it, so
+    // the photo would visibly jump the instant you grabbed it.
+    setVarPx(photo, '--x', photo.offsetLeft);
+    setVarPx(photo, '--y', photo.offsetTop);
+    photo.classList.add('is-dragged');
+  }
+
+  const originX = readVar(photo, '--x', 0);
+  const originY = readVar(photo, '--y', 0);
+  const maxX = Math.max(0, box.clientWidth - photo.offsetWidth);
+  const maxY = Math.max(0, box.clientHeight - photo.offsetHeight);
+  trackDrag(e, (dx, dy) => {
+    setVarPx(photo, '--x', clamp(originX + dx, 0, maxX));
+    setVarPx(photo, '--y', clamp(originY + dy, 0, maxY));
+  });
 }
 
 // --- Boot / shutdown ----------------------------------------------------
@@ -539,6 +570,11 @@ function initListeners() {
     const win = e.target.closest('.win.is-open:not(.is-min)');
     if (win) focusWin(win.dataset.win);
     if (mq.matches) return;
+    const photo = e.target.closest('.desk-photo');
+    if (photo) {
+      startPhotoDrag(photo, e);
+      return;
+    }
     if (e.target.closest('.win-btn')) return;
     const titleBar = e.target.closest('.win-title');
     if (!titleBar || !win) return;

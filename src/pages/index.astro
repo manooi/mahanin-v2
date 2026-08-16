@@ -7,6 +7,7 @@ import StartItem from '../components/os94/StartItem.astro';
 import SysMon from '../components/os94/SysMon.astro';
 import NetGauge from '../components/os94/NetGauge.astro';
 import GhostIcon from '../components/os94/GhostIcon.astro';
+import DeskPhoto from '../components/os94/DeskPhoto.astro';
 import NetworkIcon from '../components/os94/NetworkIcon.astro';
 import BrandIcon from '../components/os94/BrandIcon.astro';
 import { DEFS, Z, APPS, appsById, START_ORDER } from '../data/os94.js';
@@ -52,7 +53,9 @@ const SYSMON_ROWS = [
       </div>
 
       <div class="widgets">
-        <GhostIcon glyph="🐸" label="camflock" top={18} right={22} />
+        <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={-2.5} />
+
+        <GhostIcon glyph="🐸" label="camflock" top={218} right={48} />
 
         <StickyNote right={26} bottom={330} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
@@ -341,6 +344,21 @@ const SYSMON_ROWS = [
 
   .sticky-note-label { font: 400 10px/1.4 Silkscreen,monospace; color: #8a6f0e; margin-bottom: 7px; }
   .sticky-note-sign { margin-top: 8px; font-size: 10.5px; color: #8a6f0e; }
+  /* The one thing on the desktop you can pick up. Anchored by whichever sides the call
+     site passes until the first drag, then os94.js writes --x/--y and .is-dragged flips it
+     to left/top — a right-anchored element cannot take a cursor delta. touch-action: none
+     keeps a touch-drag from scrolling the page instead of moving the photo. */
+  .desk-photo {
+    position: absolute;
+    top: var(--top, auto); right: var(--right, auto); bottom: var(--bottom, auto); left: var(--left, auto);
+    width: var(--w, 132px); padding: 5px; background: #fffdf7;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.3); transform: rotate(var(--rot, -2.5deg));
+    pointer-events: auto; cursor: grab; touch-action: none; user-select: none;
+  }
+  .desk-photo.is-dragged { top: var(--y); left: var(--x); right: auto; bottom: auto; }
+  .desk-photo:active { cursor: grabbing; }
+  .desk-photo img { display: block; width: 100%; height: auto; }
+
   .sticky-note--mint { background: #a8e6cf; color: #123f36; }
   .sticky-note--mint .sticky-note-label, .sticky-note--mint .sticky-note-sign { color: #2f7a68; }
   .sticky-note--pink { background: #f5b7d0; color: #4a1330; }
