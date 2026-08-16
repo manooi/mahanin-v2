@@ -16,7 +16,7 @@ There are no test or lint commands — this is a static site.
 
 Personal site at [mahanin.com](https://mahanin.com), built with Astro (static output). Two pages:
 
-- `src/pages/index.astro` — the hub, styled as "Mahanin OS 94": a retro desktop with a skippable boot screen, 11 draggable windows (readme, resume teaser, character sheet, photos, projects, bookshelf, guestbook, contact, …), taskbar with start menu, right-click context menu (wallpaper cycle, icon arrange), shutdown screen, and a session-only in-DOM guestbook. Mobile (<760px) swaps the icon grid for a list menu and makes windows full-screen.
+- `src/pages/index.astro` — the hub, styled as "Mahanin OS 94": a retro desktop with a skippable boot screen, 12 draggable windows (welcome, readme, resume teaser, character sheet, photos, projects, bookshelf, guestbook, contact, …), taskbar with start menu, right-click context menu (wallpaper cycle, icon arrange), shutdown screen, and a session-only in-DOM guestbook. `welcome.exe` is the Mint-style first-visit panel: opens on top at startup with a no-JS resume fast-path; its "show at startup" checkbox persists as `localStorage['os94-welcome']`. Mobile (<760px) swaps the icon grid for a list menu and makes windows full-screen.
 - `src/pages/resume/index.astro` — the resume, printable to PDF via the "Save as PDF" button
 - `src/layouts/Base.astro` — shared head/meta shell; pages pass title/description/canonical/og props; a named `head` slot lets pages inject extras (the hub uses it for font preloads)
 - `src/components/os94/Window.astro` — the window chrome (title bar, min/close buttons, body variants) used 11× by the hub; geometry arrives as CSS custom properties (`--x/--y/--w/--h/--z`)
