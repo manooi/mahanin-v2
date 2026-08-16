@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <title>Mahanin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Sirawit Mahanin — Full stack developer specializing in JavaScript, TypeScript, Angular, React, and .NET. AWS Certified Cloud Practitioner. Based in Bangkok, Thailand.">
+  <meta name="description" content="Sirawit Mahanin — Consultant Developer at Thoughtworks. Full stack (TypeScript, React, .NET, NestJS, Angular), ex-civil engineer. AWS Certified Cloud Practitioner. Based in Bangkok, Thailand.">
   <meta name="author" content="Sirawit Mahanin">
   <link rel="canonical" href="https://mahanin.com/">
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="Sirawit Mahanin — Full Stack Developer">
-  <meta property="og:description" content="Full stack developer specializing in JavaScript, TypeScript, Angular, React, and .NET. Based in Bangkok, Thailand.">
+  <meta property="og:title" content="Sirawit Mahanin — Consultant Developer @ Thoughtworks">
+  <meta property="og:description" content="Consultant Developer at Thoughtworks. Full stack (TypeScript, React, .NET, NestJS, Angular), ex-civil engineer. Based in Bangkok, Thailand.">
   <meta property="og:url" content="https://mahanin.com/">
   <meta property="og:image" content="https://mahanin.com/assets/profile.webp">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -46,7 +46,7 @@
         <section id="header" class="flex justify-between">
             <div>
                 <h1 class="text-4xl font-bold mt-2">Sirawit Mahanin</h1>
-                <h2 class="mt-2 text-lg" id="age">🇹🇭 Thai, calculating age...</h2>
+                <h2 class="mt-2 text-lg" id="age">🇹🇭 Thai.</h2>
                 <p class="mt-2 text-lg">Sukhumvit 62, Bangkok 10260. 📧 sirawit@mahanin.com</p>
                 <div class="flex justify-start gap-6 mt-2 text-base">
                     <div>
@@ -69,13 +69,105 @@
 
         <section id="introduction">
             <h2 class="text-xl text-center underline mt-4 font-bold mb-3">TL;DR</h2>
-            <p>Full stack developer with extensive experience in web development, specializing in JavaScript,
-                TypeScript, Angular,
-                and .NET. Proficient in both frontend and backend technologies. Former civil engineer with a unique
-                blend of technical and analytical skills. Known for mentoring junior
-                developers and leading innovative projects. AWS Certified Cloud Practitioner and ITIL4 Foundation
-                certified. Always
-                ready to tackle new challenges.</p>
+            <p>Consultant Developer at Thoughtworks, working in the airline booking
+                domain. Full stack developer with <span id="it-years">4+</span> years in IT and a past life as
+                a civil engineer and cost estimator.</p>
+            <p class="mt-2">I embrace AI and leverage it in my daily workflow, customizing agent tooling and
+                workflows to fit how I work.</p>
+        </section>
+
+        <hr class="mt-5">
+
+        <section id="professional-experience">
+            <h2 class="text-xl text-center underline font-bold mt-4">Professional Experience</h2>
+
+            <!-- Job3 -->
+            <img class="h-7 mt-6" src="assets/tw.webp" loading="lazy" alt="Thoughtworks logo">
+            <div class="flex justify-between">
+                <h3 class="text-lg font-bold">Thoughtworks Thailand Co., Ltd
+                </h3>
+                <h3 class="text-base">Jan 2025 - Present ✅</h3>
+            </div>
+            <p class="mb-2 font-semibold italic">Consultant Developer</p>
+
+            <ul class="list-disc ml-12">
+                <li>Major airline client, booking domain. Working in a 15+ person distributed team within a
+                    100+ person delivery program.</li>
+                <li>Trusted by the client as an explainer: visual walkthroughs of complex booking concepts and
+                    proposed solutions, praised by non-technical stakeholders and teammates alike.</li>
+                <li>Day-to-day delivery on a legacy .NET and React codebase with TDD and pair programming.</li>
+                <li>Built internal tools adopted across the team, cutting debugging time and unblocking
+                    teammates during investigations; referenced in spikes and tickets as the standard
+                    investigation aid.</li>
+                <li>Active in grooming and refinement: proposing ideas, hunting edge cases, shaping requirements.</li>
+                <li>Investigated bugs across team boundaries, collaborating with other teams to land fixes.</li>
+            </ul>
+
+            <!-- Job3 -->
+            <img class="h-7 mt-6" src="assets/itone-logo.webp" loading="lazy" alt="ITOne logo">
+            <div class="flex justify-between">
+                <h3 class="text-lg font-bold">ITOne Co., Ltd.</h3>
+                <h3 class="text-base">Oct 2021 - Dec 2024</h3>
+            </div>
+
+            <p class="mb-2 italic">My first IT job — where I learned to deliver every aspect of a product for the
+                first time, from design to production.</p>
+
+            <div class="flex justify-between mt-2">
+                <p class="mb-2 font-semibold italic">Sr. Analyst — Dev Lead</p>
+                <p class="text-sm">Dec 2023 - Dec 2024</p>
+            </div>
+            <ul class="list-disc ml-12">
+                <li>Led a team of 3–4 junior developers — mentored them on writing good code and engineering
+                    practices, back when there was no AI to ask, just code review and patience.</li>
+                <li>Delivered projects end-to-end, from design through build to production.</li>
+                <li>Worked with my manager to propose solutions, estimate effort, and price client service
+                    requests.</li>
+            </ul>
+
+            <div class="flex justify-between mt-2">
+                <p class="mb-2 font-semibold italic">Analyst — Full-stack Developer</p>
+                <p class="text-sm">Oct 2021 - Nov 2023</p>
+            </div>
+            <ul class="list-disc ml-12">
+                <li>Full-stack delivery: Angular + RxJS frontends; APIs in .NET 6, NestJS, and AWS Lambda.</li>
+                <li>Led development of a resource-planning web app that replaced an Excel VBA workflow for ~20
+                    users: plans uploaded as Excel, validated and calculated server-side, Azure AD sign-in.
+                    Delivered end-to-end from design to production, infra set up with our cloud engineer.
+                </li>
+                <li>Built the frontend for an app summarizing AWS API Gateway usage by usage plan.</li>
+                <li>Automated IAM
+                    <a class="underline text-blue-700"
+                        href="https://aws.amazon.com/blogs/security/how-to-rotate-access-keys-for-iam-users/">access
+                        key</a>
+                    rotation with an AWS Lambda: email notice, disable, regenerate, delete on schedule.</li>
+            </ul>
+
+            <!-- Job2 -->
+            <img class="h-7 mt-6" src="assets/wal-logo.webp" loading="lazy" alt="WAL Consultant logo">
+            <div class="flex justify-between">
+                <h3 class="text-lg font-bold">WAL Consultant Co., Ltd.</h3>
+                <h3 class="text-base">Aug 2018 - May 2021</h3>
+            </div>
+            <p class="mb-2 font-semibold italic">Cost Engineer</p>
+
+            <ul class="list-disc ml-12">
+                <li>Ran competitive bidding end-to-end: estimated what projects should cost before bids came in,
+                    evaluated and compared contractor proposals, then interviewed, negotiated, and prepared
+                    contracts with the winners.</li>
+                <li>Estimated construction costs across the full scope of a building: structure, architecture,
+                    interiors, landscape, and external works.</li>
+                <li>Managed the money side of live construction projects: verified contractor payment claims,
+                    priced scope changes, and settled final accounts.</li>
+            </ul>
+
+            <!-- Job1 -->
+            <img class="h-6 mt-6" src="assets/aecom-icon.webp" loading="lazy" alt="AECOM logo">
+            <div class="flex justify-between">
+                <h3 class="text-lg font-semibold">Aecom Cost Consulting (Thailand) Co., Ltd.</h3>
+                <h3 class="text-base">Oct 2017 - Jun 2018</h3>
+            </div>
+            <p class="mb-2 font-bold italic">Cost Engineer</p>
         </section>
 
         <hr class="mt-5">
@@ -103,11 +195,6 @@
                 <li>Familiar with MS SQL, Postgres, and MySQL.</li>
             </ul>
 
-            <h3 class="font-bold mt-2">Automation</h3>
-            <ul class="list-disc ml-12">
-                <li>Basic n8n.</li>
-            </ul> 
-
             <h3 class="font-bold mt-3">AI & Machine learning <img src="assets/icon/robot-svgrepo-com.svg" alt="Robot" style="width: 1em; height: 1em; display: inline-block; vertical-align: middle;"></h3>
             <ul class="list-disc ml-12">
                 <li>Trained, developed, and deployed various machine learning models.</li>
@@ -117,23 +204,14 @@
                 <li>
                     <a href="https://github.com/manooi/thaihouse-gen" class="underline text-blue-700">My final
                         project (ML course)</a>
-                    in 2021. It's a generative AI for generating images of Thai houses using PyTorch. Yes, it looks
-                    terrible 😆.
+                    in 2021: generative AI producing images of Thai houses, built with PyTorch.
                 </li>
-                <li>TBH, I nearly lost it all ^ because it's not my current field of work.</li>
-                <li>Generative AI Usage: Experience using Stable Diffusion for image generation and experimenting with
-                    Ollama for
-                    local LLM inference. <span class="inline-block">
-                        <svg width="50" height="20" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="20" height="20" fill="#FFFFFF" stroke="#000000" stroke-width="0" />
-                            <text x="0" y="15" font-family="Arial" font-size="12" fill="red">
-                                <animate attributeName="visibility" from="visible" to="hidden" dur="0.5s"
-                                    repeatCount="indefinite" />
-                                new
-                            </text>
-                        </svg>
-                    </span>
-                </li>
+                <li>AI-assisted development: daily Claude Code power user with a customized setup of subagents,
+                    hooks, and skills, including a token-optimization plugin that compresses agent output to
+                    stretch context and cut session cost.</li>
+                <li>Agentic workflows: multi-agent setups (investigator / builder / reviewer subagents) with
+                    isolated git worktrees and an issue-tracker-driven build process.</li>
+                <li>Generative AI usage: Stable Diffusion for image generation, Ollama for local LLM inference.</li>
             </ul>
 
 
@@ -157,157 +235,16 @@
                 <li>Experienced with Git.</li>
             </ul>
 
-            <h3 class="font-bold mt-2">Something I wish I had experienced</h3>
+            <h3 class="font-bold mt-2">Learning backlog</h3>
+            <p class="ml-3 italic">Intent, not regret:</p>
             <ul class="list-disc ml-12">
-                <li>Real-time, WebSocket, MQTT, Kafka</li>
+                <li>Real-time systems: WebSocket, MQTT, Kafka</li>
                 <li>NoSQL</li>
                 <li>Mobile dev</li>
-                <li>Many more</li>
             </ul>
         </section>
 
         <hr class="mt-5">
-
-        <section id="professional-experience">
-            <h2 class="text-xl text-center underline font-bold mt-4">Professional Experience</h2>
-
-            <!-- Job3 -->
-            <img class="h-7 mt-6" src="assets/tw.webp" loading="lazy" alt="Thoughtworks logo">
-            <div class="flex justify-between">
-                <h3 class="text-lg font-bold">Thoughtworks Thailand Co., Ltd
-                </h3>
-                <h3 class="text-base">Jan 2025 - Present ✅</h3>
-            </div>
-            <p class="mb-2 font-semibold italic">Consultant Developer</p>
-
-            <ul class="list-disc ml-12">
-                <li>Maintained and enhanced legacy .NET and React codebase for a major airline business.</li>
-                <li>Worked with an agile team, applying TDD and pair programming practices.</li>
-            </ul>
-
-            <!-- Job3 -->
-            <img class="h-7 mt-6" src="assets/itone-logo.webp" loading="lazy" alt="ITOne logo">
-            <div class="flex justify-between">
-                <h3 class="text-lg font-bold">ITOne Co., Ltd.</h3>
-                <h3 class="text-base">Oct 2021 - Dec 2024</h3>
-            </div>
-
-            <div>
-                <ul>
-                    <li class="mt-2">
-                        <div class="flex justify-between">
-                            <p class="mb-2 font-semibold italic inline ml-3">
-                                Sr. Analyst
-                            </p>
-                            <p class="text-sm">
-                                Dec 2023 - Dec 2024
-                            </p>
-                        </div>
-                        <ul class="list-disc ml-12">
-                            <li class="list-none font-bold">As dev lead:-</li>
-                            <li class="sm:ml-0 md:ml-8">Mentored junior developers, fostering a collaborative learning
-                                environment and
-                                enhancing team
-                                productivity.</li>
-                            <li class="sm:ml-0 md:ml-8">Demonstrated strong troubleshooting skills to identify root
-                                causes
-                                and implement
-                                effective solutions.</li>
-                            <li class="sm:ml-0 md:ml-8">Estimated efforts and provided solutions to client's service
-                                requests.
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="mt-2">
-                        <div class="flex justify-between">
-                            <p class="mb-2 font-semibold italic inline ml-3">
-                                Analyst
-                            </p>
-                            <p class="text-sm">
-                                Oct 2021 - Nov 2023
-                            </p>
-                        </div>
-
-                        <ul class="list-disc ml-12">
-                            <li class="list-none mt-2 font-bold">As full-stack dev:-</li>
-                            <li class="sm:ml-0 md:ml-8">Developed web applications using Angular. Reactive programming
-                                with
-                                rxjs.</li>
-                            <li class="sm:ml-0 md:ml-8">Developed API with .NET 6, AWS Lambda and most recently with
-                                NestJS.
-                            </li>
-                        </ul>
-
-                        <ul class="list-disc ml-12">
-                            <li class="list-none mt-2 font-bold">Overview of each project I involed, mostly web applications:-</li>
-                            <li class="sm:ml-0 md:ml-8">Led in the development of resource planning web application that
-                                involves uploading and
-                                downloading Excel files.
-                                Users can upload planned resources to the application, where the backend performs
-                                extensive
-                                data
-                                validations and calculations. The authentication process utilizes Azure AD.
-                                <span class="font-bold italic">Keywords: Angular 13, .NET 6, Azure AD,
-                                    <a class="underline text-blue-700"
-                                        href="https://www.npmjs.com/package/@azure/msal-angular">MSAL</a>,
-                                    <a class="underline text-blue-700"
-                                        href="https://www.npmjs.com/package/xlsx">xlsx</a>
-                                    and
-                                    <a class="underline text-blue-700"
-                                        href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web
-                                        workers.</a>
-                                </span>
-                            <li class="sm:ml-0 md:ml-8">Worked as a frontend developer (Angular) for a web application
-                                that
-                                summarizes AWS API
-                                Gateway usage by usage plans.
-                                <span class="font-bold italic">Keywords: Angular 8, AWS Lambda, API Gateway, Usage
-                                    plans.</span>
-                            </li>
-                            <li class="sm:ml-0 md:ml-8">Developed and deployed AWS Lambda function to rotate
-                                <a class="underline text-blue-700"
-                                    href="https://aws.amazon.com/blogs/security/how-to-rotate-access-keys-for-iam-users/">access
-                                    keys</a>
-                                based on specific criteria. The processes involved email notification, disabling,
-                                generating, and
-                                then deleting the
-                                access key.
-                                <span class="font-bold italic">Keywords: AWS Lambda, IAM and NodeJS.</span>
-                            </li>
-                        </ul>
-
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Job2 -->
-            <img class="h-7 mt-6" src="assets/wal-logo.webp" loading="lazy" alt="WAL Consultant logo">
-            <div class="flex justify-between">
-                <h3 class="text-lg font-bold">WAL Consultant Co., Ltd.</h3>
-                <h3 class="text-base">Aug 2018 - May 2021</h3>
-            </div>
-            <p class="mb-2 font-semibold italic">Cost Engineer</p>
-
-            <ul class="list-disc ml-12">
-                <li>Handled works such as pre-qualification, tender administration, pre-tender estimate, tender reports,
-                    tender comparison,
-                    interview, negotiation, and contract preparation.</li>
-                <li>Managed post-contract works including progress claims, variation works, and final account.</li>
-                <li>Conducted construction cost estimation for structural, architectural, external, landscape, and
-                    interior works.</li>
-            </ul>
-
-            <!-- Job1 -->
-            <img class="h-6 mt-6" src="assets/aecom-icon.webp" loading="lazy" alt="AECOM logo">
-            <div class="flex justify-between">
-                <h3 class="text-lg font-semibold">Aecom Cost Consulting (Thailand) Co., Ltd.</h3>
-                <h3 class="text-base">Oct 2017 - Jun 2018</h3>
-            </div>
-            <p class="mb-2 font-bold italic">Cost Engineer</p>
-        </section>
-
-        <hr class="mt-3">
 
         <section id="education">
             <h2 class="text-xl text-center underline font-bold mt-4 mb-3">Education</h2>
@@ -321,34 +258,22 @@
   </div>
 
   <script>
-    function getAge() {
-      const today = new Date();
-      const birth = new Date('1994-11-10');
+    const birthYear = 1994;
+    const age = new Date().getFullYear() - birthYear;
+    document.getElementById('age').textContent = `🇹🇭 Thai, ${age} years old.`;
 
-      let years = today.getFullYear() - birth.getFullYear();
-      let months = today.getMonth() - birth.getMonth();
-      let days = today.getDate() - birth.getDate();
-
-      if (months < 0 || (months === 0 && days < 0)) {
+    function getItYears() {
+      const start = new Date('2021-10-01');
+      const now = new Date();
+      let years = now.getFullYear() - start.getFullYear();
+      if (now.getMonth() < start.getMonth() ||
+          (now.getMonth() === start.getMonth() && now.getDate() < start.getDate())) {
         years--;
-        months += 12;
       }
-
-      if (days < 0) {
-        const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, birth.getDate());
-        const diffMs = today.getTime() - prevMonth.getTime();
-        days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      }
-
-      return {
-        years: years,
-        months: months,
-        days: days,
-      };
+      return years;
     }
 
-    const myAge = getAge();
-    document.getElementById('age').textContent = `🇹🇭 Thai, ${myAge.years} years ${myAge.months} months ${myAge.days} days old.`;
+    document.getElementById('it-years').textContent = `${getItYears()}+`;
   </script>
 </body>
 </html>
