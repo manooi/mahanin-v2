@@ -248,6 +248,30 @@ function cycleWall() {
   closeMenus();
 }
 
+function copyToClipboard(text, btn) {
+  const showResult = (ok) => {
+    if (!btn) return;
+    // Resting label must be captured once, before any swap ever happens — reading
+    // btn.textContent here would pick up a still-pending '✓'/'✕' from an earlier
+    // click (fires within the same 1.5s window) and the button would get stuck.
+    if (btn.dataset.idleLabel === undefined) btn.dataset.idleLabel = btn.textContent;
+    const original = btn.dataset.idleLabel;
+    btn.classList.remove('is-copied', 'is-copy-failed');
+    btn.classList.add(ok ? 'is-copied' : 'is-copy-failed');
+    btn.textContent = ok ? '✓' : '✕';
+    clearTimeout(btn._copyResetTimer);
+    btn._copyResetTimer = setTimeout(() => {
+      btn.classList.remove('is-copied', 'is-copy-failed');
+      btn.textContent = original;
+    }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showResult(true), () => showResult(false));
+  } else {
+    showResult(false);
+  }
+}
+
 // --- Dispatch / listeners ---------------------------------------------
 
 function dispatchAction(action, el) {
@@ -273,6 +297,9 @@ function dispatchAction(action, el) {
       break;
     case 'wall':
       cycleWall();
+      break;
+    case 'copy':
+      if (el.dataset.copyText) copyToClipboard(el.dataset.copyText, el);
       break;
     default:
       break;
@@ -315,12 +342,15 @@ function initListeners() {
   );
 
   document.addEventListener('mousedown', (e) => {
-    if (e.button !== 0 || mq.matches) return;
+    if (e.button !== 0) return;
+    // Clicking anywhere in an open window — not just its title bar — should bring it
+    // to the front, same as a real desktop. Drag-start (below) is a separate concern.
+    const win = e.target.closest('.win.is-open:not(.is-min)');
+    if (win) focusWin(win.dataset.win);
+    if (mq.matches) return;
     if (e.target.closest('.win-btn')) return;
     const titleBar = e.target.closest('.win-title');
-    if (!titleBar) return;
-    const win = titleBar.closest('.win');
-    if (!win) return;
+    if (!titleBar || !win) return;
     startDrag(win, e);
   });
 
