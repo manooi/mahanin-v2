@@ -12,8 +12,6 @@ const BOOT = [
   'READY.'
 ];
 
-const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
 let topZ = 30;
 let wallIndex = 0;
 let bootTimer = null;
@@ -256,44 +254,6 @@ function toggleArrange() {
   closeMenus();
 }
 
-// --- Guestbook --------------------------------------------------------
-
-function updateVisitorNo() {
-  const list = document.getElementById('guest-list');
-  const visitorEl = document.getElementById('guest-visitor');
-  if (!list || !visitorEl) return;
-  visitorEl.textContent = 'OO' + String(1994 + list.children.length).padStart(6, '0').slice(2);
-}
-
-function signGuest() {
-  const input = document.getElementById('guest-input');
-  if (!input) return;
-  const text = input.value.trim();
-  if (!text) return;
-
-  const now = new Date();
-  const when = MONTHS[now.getMonth()] + ' ' + now.getFullYear();
-
-  const entry = document.createElement('div');
-  entry.className = 'card guest-entry';
-
-  const meta = document.createElement('div');
-  meta.className = 'guest-entry-meta';
-  meta.textContent = 'you · ' + when;
-  entry.appendChild(meta);
-
-  const body = document.createElement('div');
-  body.className = 'guest-entry-text';
-  body.textContent = text;
-  entry.appendChild(body);
-
-  const list = document.getElementById('guest-list');
-  if (list) list.insertBefore(entry, list.firstChild);
-
-  input.value = '';
-  updateVisitorNo();
-}
-
 // --- Dispatch / listeners ---------------------------------------------
 
 function dispatchAction(action, el) {
@@ -322,9 +282,6 @@ function dispatchAction(action, el) {
       break;
     case 'arrange':
       toggleArrange();
-      break;
-    case 'sign':
-      signGuest();
       break;
     default:
       break;
@@ -378,13 +335,6 @@ function initListeners() {
 
   window.addEventListener('keydown', onBootKeydown);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target && e.target.id === 'guest-input') {
-      e.preventDefault();
-      signGuest();
-    }
-  });
-
   const desktop = document.getElementById('desktop');
   if (desktop) desktop.addEventListener('contextmenu', openCtxMenu);
 
@@ -414,7 +364,6 @@ function init() {
   tick();
   setInterval(tick, 1000);
   renderTaskbar();
-  updateVisitorNo();
   startBoot();
 }
 

@@ -13,38 +13,32 @@ const DEFS = {
   welcome:  { x: 430, y: 80,  w: 450, h: 428 },
   readme:   { x: 236, y: 44,  w: 430, h: 372 },
   resume:   { x: 316, y: 118, w: 452, h: 424 },
-  computer: { x: 352, y: 84,  w: 420, h: 400 },
   char:     { x: 392, y: 110, w: 458, h: 452 },
   photo:    { x: 400, y: 92,  w: 424, h: 466 },
   projects: { x: 352, y: 150, w: 452, h: 356 },
   books:    { x: 288, y: 96,  w: 424, h: 420 },
-  life:     { x: 380, y: 128, w: 400, h: 372 },
-  now:      { x: 344, y: 172, w: 440, h: 320 },
-  guest:    { x: 296, y: 106, w: 424, h: 428 },
   contact:  { x: 420, y: 138, w: 408, h: 348 },
+  winamp:   { x: 520, y: 430, w: 276, h: 168 },
 };
-// welcome opens above the other 11 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
-const Z = Object.fromEntries(Object.keys(DEFS).filter((k) => k !== 'welcome').map((k, i) => [k, 10 + i]));
-Z.welcome = 25;
+// welcome opens above the other 8 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
+// Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer removed); winamp is new, one above the old highest static z. Gaps are harmless.
+const Z = { readme: 10, resume: 11, char: 13, photo: 14, projects: 15, books: 16, contact: 20, winamp: 21, welcome: 25 };
 
 // Apps drive the icon grid, mobile menu, and start menu.
 const APPS = [
   { id: 'welcome',  icon: '👋', gridLines: ['welcome'],           mobileLabel: 'welcome',           startLabel: 'welcome' },
   { id: 'readme',   icon: '📝', gridLines: ['readme.txt'],        mobileLabel: 'readme.txt',        startLabel: 'readme.txt' },
   { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)' },
-  { id: 'computer', icon: '💾', gridLines: ['my', 'computer'],     mobileLabel: null,                startLabel: 'my computer' },
   { id: 'char',     icon: '🍁', gridLines: ['character'],          mobileLabel: 'character',         startLabel: 'character' },
   { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos' },
   { id: 'projects', icon: '🛠️', gridLines: ['projects'],           mobileLabel: 'projects',          startLabel: 'projects' },
   { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf' },
-  { id: 'life',     icon: '🏠', gridLines: ['life.exe'],           mobileLabel: 'life.exe',          startLabel: null },
-  { id: 'now',      icon: '🕹️', gridLines: ['now'],                mobileLabel: 'now',               startLabel: 'now' },
-  { id: 'guest',    icon: '✍️', gridLines: ['guestbook'],          mobileLabel: 'guestbook',         startLabel: 'guestbook' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             mobileLabel: 'say hi',            startLabel: 'say hi' },
+  { id: 'winamp',   icon: '🎵', gridLines: ['winamp'],             mobileLabel: 'winamp',            startLabel: 'winamp' },
 ];
 const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
-// Start menu order/inclusion differs from icon grid: char before computer, life omitted entirely.
-const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'photo', 'projects', 'books', 'now', 'guest', 'contact', null];
+// Start menu mirrors APPS order; null entries are separators before shutdown.
+const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'projects', 'books', 'contact', 'winamp', null];
 ---
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
   <Fragment slot="head">
@@ -88,25 +82,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
           <div class="sticky-note-label">STICKY NOTE</div>
           currently open to work &mdash; and to good coffee recommendations.
           <div class="sticky-note-sign">— me, to me</div>
-        </div>
-
-        <div class="winamp">
-          <div class="winamp-head">
-            <span class="winamp-head-label">NOW PLAYING</span>
-            <span class="winamp-head-kbps">KBPS 128</span>
-          </div>
-          <div class="winamp-body">
-            <div class="winamp-track"><span class="winamp-track-text">[ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; [ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; </span></div>
-            <div class="winamp-eq">
-              <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
-            </div>
-            <div class="winamp-transport">
-              <span class="winamp-btn">◀◀</span>
-              <span class="winamp-btn winamp-btn--accent">▶</span>
-              <span class="winamp-btn">❚❚</span>
-              <span class="winamp-btn">▶▶</span>
-            </div>
-          </div>
         </div>
 
         <div class="sysmon">
@@ -153,16 +128,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
           STATUS · Open to a good conversation
         </div>
         <a href="/resume/" class="btn-9x">OPEN FULL RESUME →</a>
-      </Window>
-
-      <Window id="computer" title="💾 my computer" x={DEFS.computer.x} y={DEFS.computer.y} w={DEFS.computer.w} h={DEFS.computer.h} z={Z.computer}>
-        <div class="drive-list">
-          <button type="button" class="row" data-app="projects"><span class="row-icon">🗄️</span><span class="row-body"><strong>C:\ work</strong><br><span class="row-desc">code, clients, standups. 91% full</span></span></button>
-          <button type="button" class="row" data-app="photo"><span class="row-icon">💽</span><span class="row-body"><strong>D:\ hobbies</strong><br><span class="row-desc">photos, books, maple. always room for more</span></span></button>
-          <button type="button" class="row" data-app="life"><span class="row-icon">📼</span><span class="row-body"><strong>E:\ regrets</strong><br><span class="row-desc">read&#8209;only. do not defragment</span></span></button>
-          <div class="row row--disabled"><span class="row-icon row-icon--muted">💿</span><span class="row-body"><strong>A:\ floppy</strong><br><span class="row-desc">please insert disk 2 of 14</span></span></div>
-        </div>
-        <div class="computer-note">4 OBJECTS · 1 EMOTIONALLY LOAD&#8209;BEARING</div>
       </Window>
 
       <Window id="char" title="🍁 character.dat" x={DEFS.char.x} y={DEFS.char.y} w={DEFS.char.w} h={DEFS.char.h} z={Z.char} variant="char">
@@ -230,52 +195,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
         <p class="book-note">Send me the counts and titles and I&rsquo;ll fill this shelf properly.</p>
       </Window>
 
-      <Window id="life" title="🏠 life.exe" x={DEFS.life.x} y={DEFS.life.y} w={DEFS.life.w} h={DEFS.life.h} z={Z.life} bodyClass="win-body--center">
-        <div class="under-construction">
-          <div class="uc-title">🚧 UNDER CONSTRUCTION 🚧</div>
-          <div class="uc-sub">SINCE APPROXIMATELY FOREVER</div>
-        </div>
-        <p class="life-para">This is where the personal stuff goes: weekend notes, half&#8209;formed opinions, photos of food I already ate.</p>
-        <div class="card life-card">
-          POSTS &nbsp;· 0<br>
-          DRAFTS · a suspicious number<br>
-          AMBITION · 100%
-        </div>
-      </Window>
-
-      <Window id="now" title="🕹️ now.log" x={DEFS.now.x} y={DEFS.now.y} w={DEFS.now.w} h={DEFS.now.h} z={Z.now} variant="term">
-        <div class="now-prompt">C:\NOW&gt; type now.log</div>
-        <div>[WORK] &nbsp;consulting, shipping, unblocking people</div>
-        <div>[PLAY] &nbsp;grinding in MapleStory. level: classified</div>
-        <div>[READ] &nbsp;one book, slowly, on purpose</div>
-        <div>[SHOOT] walking Bangkok with one lens</div>
-        <div>[LEARN] [ whatever you&rsquo;re into right now ]</div>
-        <div class="now-updated">— updated whenever life updates<span class="blink-cursor">▌</span></div>
-      </Window>
-
-      <Window id="guest" title="✍️ guestbook" x={DEFS.guest.x} y={DEFS.guest.y} w={DEFS.guest.w} h={DEFS.guest.h} z={Z.guest}>
-        <p class="guest-intro">Sign the book like it&rsquo;s 2003. No account, no algorithm.</p>
-        <div class="guest-form">
-          <input id="guest-input" class="guest-input" placeholder="say something nice...">
-          <button type="button" class="btn-9x btn-9x--sign" data-action="sign">SIGN</button>
-        </div>
-        <div id="guest-list">
-          <div class="card guest-entry">
-            <div class="guest-entry-meta">anonymous · AUG 2026</div>
-            <div class="guest-entry-text">found this while procrastinating. worth it.</div>
-          </div>
-          <div class="card guest-entry">
-            <div class="guest-entry-meta">mom · JUL 2026</div>
-            <div class="guest-entry-text">call me back please</div>
-          </div>
-          <div class="card guest-entry">
-            <div class="guest-entry-meta">a recruiter · JUL 2026</div>
-            <div class="guest-entry-text">i clicked the HR folder. respect.</div>
-          </div>
-        </div>
-        <div class="guest-visitor-line">VISITOR NO. <span id="guest-visitor">OO1997</span></div>
-      </Window>
-
       <Window id="contact" title="✉️ say hi" x={DEFS.contact.x} y={DEFS.contact.y} w={DEFS.contact.w} h={DEFS.contact.h} z={Z.contact}>
         <p>Work, photos, book recommendations, or which class to main next. All welcome.</p>
         <div class="contact-rows">
@@ -284,6 +203,25 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
           <a href="https://github.com/manooi" class="row">🛠️ <span class="row-label">GitHub</span><span class="row-badge">HONEST</span></a>
         </div>
         <p class="contact-note">Replies usually within a day, unless MapleStory has an event.</p>
+      </Window>
+
+      <Window id="winamp" title="🎵 winamp" x={DEFS.winamp.x} y={DEFS.winamp.y} w={DEFS.winamp.w} h={DEFS.winamp.h} z={Z.winamp} bodyClass="win-body--flush">
+        <div class="winamp-head">
+          <span class="winamp-head-label">NOW PLAYING</span>
+          <span class="winamp-head-kbps">KBPS 128</span>
+        </div>
+        <div class="winamp-body">
+          <div class="winamp-track"><span class="winamp-track-text">[ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; [ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; </span></div>
+          <div class="winamp-eq">
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+          </div>
+          <div class="winamp-transport">
+            <span class="winamp-btn">◀◀</span>
+            <span class="winamp-btn winamp-btn--accent">▶</span>
+            <span class="winamp-btn">❚❚</span>
+            <span class="winamp-btn">▶▶</span>
+          </div>
+        </div>
       </Window>
 
       <div id="ctx-menu" class="ctx-menu" data-menu="ctx">
@@ -428,10 +366,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
   .sticky-note-label { font: 400 10px/1.4 Silkscreen,monospace; color: #8a6f0e; margin-bottom: 7px; }
   .sticky-note-sign { margin-top: 8px; font-size: 10.5px; color: #8a6f0e; }
 
-  .winamp {
-    position: absolute; right: 20px; bottom: 186px; width: 238px; background: #3a3450;
-    border: 2px solid; border-color: #6b619b #14101f #14101f #6b619b; box-shadow: 3px 3px 0 rgba(0,0,0,.35);
-  }
   .winamp-head { display: flex; align-items: center; gap: 6px; padding: 4px 6px; background: linear-gradient(90deg,#14101f,#3a3450); }
   .winamp-head-label { font: 400 8.5px Silkscreen,monospace; color: #8fe3d6; flex: 1; }
   .winamp-head-kbps { font: 400 8.5px Silkscreen,monospace; color: #f2c14b; }
@@ -480,9 +414,8 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
   .win-btn--close:hover { background: #e07a3f; color: #fff; }
   .win-body { flex: 1; overflow: auto; padding: 14px 16px 16px; background: #efe9dc; font: 400 12.5px/1.7 'IBM Plex Mono',monospace; color: #2a2620; }
   .win-body--pad-lg { padding: 16px 18px 18px; }
-  .win-body--center { text-align: center; }
   .win-body--char { background: #f6e8ef; color: #3a1c2b; }
-  .win-body--term { background: #1b2a24; color: #9fe6cf; line-height: 1.85; }
+  .win-body--flush { padding: 0; background: #3a3450; }
 
   /* ---------- primitives ---------- */
   .card { background: #fffdf7; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; padding: 10px 12px; }
@@ -494,14 +427,8 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
     color: #2a2620; cursor: pointer;
   }
   .btn-9x:hover { background: #3a3450; color: #fff; border-color: #8a8275 #1a1626 #1a1626 #8a8275; }
-  .btn-9x--sign { padding: 7px 11px; font: 400 10px Silkscreen,monospace; white-space: nowrap; }
   .btn-9x--power { margin-top: 22px; padding: 10px 16px; }
-  .btn-9x--sign:hover, .btn-9x--power:hover { background: #e07a3f; color: #fff; border-color: #fffdf7 #4a453c #4a453c #fffdf7; }
-
-  .guest-input {
-    flex: 1; min-width: 0; background: #fffdf7; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275;
-    padding: 7px 8px; font: 400 12px 'IBM Plex Mono',monospace; color: #2a2620; outline: none;
-  }
+  .btn-9x--power:hover { background: #e07a3f; color: #fff; border-color: #fffdf7 #4a453c #4a453c #fffdf7; }
 
   .row {
     display: flex; gap: 10px; align-items: center; width: 100%; text-align: left;
@@ -509,12 +436,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
     padding: 9px 10px; color: #2a2620; text-decoration: none; cursor: pointer; font: inherit;
   }
   .row:hover { background: #f2c14b; }
-  .row--disabled { background: #e6e0d1; color: #6b6459; cursor: default; }
-  .row--disabled:hover { background: #e6e0d1; }
-  .row-icon { font-size: 20px; }
-  .row-icon--muted { filter: grayscale(1); }
-  .row-body { flex: 1; }
-  .row-desc { font-size: 11px; color: #6b6459; }
   .row-label { flex: 1; }
   .row-badge { font: 400 8.5px Silkscreen,monospace; color: #8a3b12; }
 
@@ -535,9 +456,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
 
   .hr-badge { display: inline-block; background: #e07a3f; color: #fff; font: 400 9.5px/1 Silkscreen,monospace; letter-spacing: .5px; padding: 6px 8px; margin-bottom: 12px; box-shadow: 2px 2px 0 rgba(0,0,0,.3); }
   .resume-info { font-size: 11.5px; line-height: 1.9; margin-bottom: 14px; }
-
-  .drive-list { display: flex; flex-direction: column; gap: 7px; }
-  .computer-note { margin-top: 12px; background: #cfc7b6; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; padding: 6px 9px; font: 400 9px Silkscreen,monospace; color: #4a453c; }
 
   .char-top { display: flex; gap: 12px; margin-bottom: 12px; }
   .char-sprite { width: 84px; height: 104px; flex: none; background: repeating-linear-gradient(135deg,#e3c6d6 0 6px,#f0dae6 6px 12px); border: 2px solid; border-color: #a8788f #fff #fff #a8788f; display: grid; place-items: center; text-align: center; font: 400 8px/1.4 'IBM Plex Mono',monospace; color: #7a5266; padding: 4px; }
@@ -574,22 +492,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
   .book-shelf-row:last-child { border-bottom: none; padding-bottom: 0; }
   .book-shelf-count { color: #6b6459; }
   .book-note { margin: 14px 0 0; font-size: 11.5px; color: #6b6459; }
-
-  .under-construction { display: inline-block; background: #f2c14b; border: 2px solid; border-color: #fff5d1 #7a5f12 #7a5f12 #fff5d1; padding: 12px 16px; margin: 6px 0 14px; box-shadow: 3px 3px 0 rgba(0,0,0,.3); }
-  .uc-title { font: 400 13px/1.4 Silkscreen,monospace; color: #3a2c05; }
-  .uc-sub { font: 400 8.5px/1.4 Silkscreen,monospace; color: #6b520e; margin-top: 6px; }
-  .life-para { text-align: left; }
-  .life-card { text-align: left; font-size: 11.5px; }
-
-  .now-prompt { font: 400 10px/1.4 Silkscreen,monospace; color: #f2c14b; margin-bottom: 10px; }
-  .now-updated { margin-top: 12px; color: #5e8f7e; }
-
-  .guest-intro { font-size: 11.5px; }
-  .guest-form { display: flex; gap: 6px; margin-bottom: 12px; }
-  .guest-entry { padding: 8px 10px; margin-bottom: 6px; }
-  .guest-entry-meta { font: 400 8.5px/1.4 Silkscreen,monospace; color: #8a3b12; margin-bottom: 3px; }
-  .guest-entry-text { font-size: 11.5px; }
-  .guest-visitor-line { margin-top: 10px; font: 400 9px/1.4 Silkscreen,monospace; color: #6b6459; }
 
   .contact-rows { display: flex; flex-direction: column; gap: 6px; }
   .contact-note { margin: 12px 0 0; font-size: 11.5px; color: #6b6459; }
