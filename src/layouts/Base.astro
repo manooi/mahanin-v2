@@ -24,7 +24,10 @@ const { title, description, canonical, ogTitle = title, ogDescription = descript
   <meta property="og:title" content={ogTitle}>
   <meta property="og:description" content={ogDescription}>
   <meta property="og:url" content={canonical}>
-  <meta property="og:image" content="https://mahanin.com/assets/profile.jpg">
+  <meta property="og:image" content="https://mahanin.com/assets/profile.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="1080">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <slot name="head" />
 </head>
