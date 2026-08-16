@@ -669,7 +669,20 @@ const SYSMON_ROWS = [
       width: auto; max-width: none; margin: 0;
       padding: 22px 18px 32px; border-top: 1px dotted rgba(255,255,255,.25);
     }
-    .win { position: fixed; left: 6px; right: 6px; top: 6px; bottom: 50px; width: auto; height: auto; }
+    /* Windows fit their content instead of filling the screen: dropping `bottom` is what
+       lets the frame size to what is inside it. The cap goes on .win-frame rather than on
+       .win because the frame is the flex column, so a max-height there is a definite bound
+       its .win-body can shrink against — that is what keeps a long window (the recycle bin)
+       scrolling inside its own body instead of running past the taskbar. 56px is the 44px
+       taskbar plus the 6px gap top and bottom. dvh second so it wins where supported: a
+       mobile URL bar makes vh taller than the part of the screen you can actually see. */
+    .win { position: fixed; left: 6px; right: 6px; top: 6px; bottom: auto; width: auto; height: auto; }
+    .win-frame { height: auto; max-height: calc(100vh - 56px); }
+    /* Not two max-heights in one rule: the minifier drops the first as a dead duplicate,
+       which would leave anything without dvh support uncapped entirely. @supports survives. */
+    @supports (height: 100dvh) {
+      .win-frame { max-height: calc(100dvh - 56px); }
+    }
     .start-menu { left: 8px; right: 8px; width: auto; }
   }
 </style>
