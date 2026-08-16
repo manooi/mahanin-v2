@@ -10,6 +10,7 @@ const ogDescription = 'Consultant Developer at Thoughtworks, Bangkok. Resume, ph
 
 // Window geometry — single source of truth (design's DEFS table). Never duplicate into JS.
 const DEFS = {
+  welcome:  { x: 430, y: 80,  w: 450, h: 428 },
   readme:   { x: 236, y: 44,  w: 430, h: 372 },
   resume:   { x: 316, y: 118, w: 452, h: 424 },
   computer: { x: 352, y: 84,  w: 420, h: 400 },
@@ -22,10 +23,13 @@ const DEFS = {
   guest:    { x: 296, y: 106, w: 424, h: 428 },
   contact:  { x: 420, y: 138, w: 408, h: 348 },
 };
-const Z = Object.fromEntries(Object.keys(DEFS).map((k, i) => [k, 10 + i]));
+// welcome opens above the other 11 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
+const Z = Object.fromEntries(Object.keys(DEFS).filter((k) => k !== 'welcome').map((k, i) => [k, 10 + i]));
+Z.welcome = 25;
 
 // Apps drive the icon grid, mobile menu, and start menu.
 const APPS = [
+  { id: 'welcome',  icon: '👋', gridLines: ['welcome'],           mobileLabel: 'welcome',           startLabel: 'welcome' },
   { id: 'readme',   icon: '📝', gridLines: ['readme.txt'],        mobileLabel: 'readme.txt',        startLabel: 'readme.txt' },
   { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)' },
   { id: 'computer', icon: '💾', gridLines: ['my', 'computer'],     mobileLabel: null,                startLabel: 'my computer' },
@@ -40,7 +44,7 @@ const APPS = [
 ];
 const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
 // Start menu order/inclusion differs from icon grid: char before computer, life omitted entirely.
-const START_ORDER = ['readme', 'resume', 'char', 'computer', null, 'photo', 'projects', 'books', 'now', 'guest', 'contact', null];
+const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'photo', 'projects', 'books', 'now', 'guest', 'contact', null];
 ---
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
   <Fragment slot="head">
@@ -112,6 +116,19 @@ const START_ORDER = ['readme', 'resume', 'char', 'computer', null, 'photo', 'pro
           <div class="sysmon-caption">CAFFEINE 82%</div>
         </div>
       </div>
+
+      <Window id="welcome" title="👋 welcome.exe" x={DEFS.welcome.x} y={DEFS.welcome.y} w={DEFS.welcome.w} h={DEFS.welcome.h} z={Z.welcome} open bodyClass="win-body--pad-lg">
+        <div class="sec-label">FIRST TIME HERE?</div>
+        <p>Quick exits, before the desktop swallows you.</p>
+        <a href="/resume/" class="row welcome-primary">👔 <span class="row-label">open the resume</span><span class="row-badge">FOR HR &mdash; PRINTABLE PDF</span></a>
+        <div class="contact-rows">
+          <button type="button" class="row" data-app="readme">📝 <span class="row-label">who is this guy?</span></button>
+          <button type="button" class="row" data-app="photo">📷 <span class="row-label">photos</span></button>
+          <button type="button" class="row" data-app="projects">🛠️ <span class="row-label">projects</span></button>
+          <button type="button" class="row" data-app="contact">✉️ <span class="row-label">say hi</span></button>
+        </div>
+        <label class="welcome-startup"><input type="checkbox" id="welcome-startup" checked> show this window at startup</label>
+      </Window>
 
       <Window id="readme" title="📝 readme.txt" x={DEFS.readme.x} y={DEFS.readme.y} w={DEFS.readme.w} h={DEFS.readme.h} z={Z.readme} open bodyClass="win-body--pad-lg">
         <h1 class="readme-title">HELLO, VISITOR</h1>
@@ -297,6 +314,7 @@ const START_ORDER = ['readme', 'resume', 'char', 'computer', null, 'photo', 'pro
       </button>
       <div class="tb-sep"></div>
       <div id="taskbar-btns" class="taskbar-btns">
+        <button type="button" class="task-btn" data-task="welcome">👋 welcome.exe</button>
         <button type="button" class="task-btn" data-task="readme">📝 readme.txt</button>
       </div>
       <div class="tray">
@@ -504,6 +522,12 @@ const START_ORDER = ['readme', 'resume', 'char', 'computer', null, 'photo', 'pro
   .sec-label { font: 400 10px/1.4 Silkscreen,monospace; color: #8a3b12; margin-bottom: 8px; }
 
   /* ---------- window-specific one-offs ---------- */
+  .welcome-primary { margin: 10px 0 16px; border-color: #e07a3f #7a3b12 #7a3b12 #e07a3f; box-shadow: 2px 2px 0 rgba(0,0,0,.25); }
+  .welcome-primary:hover { background: #e07a3f; }
+  .welcome-primary:hover .row-badge { color: #fff; }
+  .welcome-startup { display: flex; align-items: center; gap: 7px; margin-top: 14px; font: 400 11px 'IBM Plex Mono',monospace; color: #6b6459; cursor: pointer; }
+  .welcome-startup input { accent-color: #e07a3f; width: 13px; height: 13px; cursor: pointer; }
+
   .readme-title { font: 400 19px/1.3 Silkscreen,monospace; color: #2a2620; margin: 0 0 4px; }
   .readme-subtitle { font: 400 10px/1.4 Silkscreen,monospace; color: #8a3b12; letter-spacing: .4px; margin-bottom: 14px; }
   .readme-tip { font-size: 11.5px; line-height: 1.7; }

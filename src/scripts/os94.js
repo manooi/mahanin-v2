@@ -387,9 +387,29 @@ function initListeners() {
 
   const desktop = document.getElementById('desktop');
   if (desktop) desktop.addEventListener('contextmenu', openCtxMenu);
+
+  const welcomeStartup = document.getElementById('welcome-startup');
+  if (welcomeStartup) {
+    welcomeStartup.addEventListener('change', () => {
+      try {
+        if (welcomeStartup.checked) {
+          localStorage.removeItem('os94-welcome');
+        } else {
+          localStorage.setItem('os94-welcome', 'off');
+        }
+      } catch (e) {}
+    });
+  }
 }
 
 function init() {
+  try {
+    if (localStorage.getItem('os94-welcome') === 'off') {
+      const win = getWin('welcome');
+      if (win) win.classList.remove('is-open');
+    }
+  } catch (e) {}
+
   initListeners();
   tick();
   setInterval(tick, 1000);
