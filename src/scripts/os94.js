@@ -157,7 +157,7 @@ function startBoot() {
     }
     appendBootLine(BOOT[bootCount]);
     bootCount += 1;
-  }, 340);
+  }, 185);
 }
 
 function skipBoot() {
