@@ -36,6 +36,45 @@
             margin-right: 5%;
         }
     }
+
+    /* PDF export: browser print keeps the on-screen style */
+    @media print {
+        @page {
+            margin: 12mm;
+        }
+
+        /* Tailwind sizes are rem-based, so this scales all text proportionally */
+        html {
+            font-size: 12px;
+        }
+
+        #header img[alt="Sirawit Mahanin profile picture"] {
+            width: 160px !important;
+        }
+
+        .no-print {
+            display: none;
+        }
+
+        /* Paper width falls under the md: breakpoint; force the photo back */
+        #header .hidden {
+            display: block;
+        }
+
+        .resume-box {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+        }
+
+        h2, h3 {
+            break-after: avoid;
+        }
+
+        li, #header {
+            break-inside: avoid;
+        }
+    }
   </style>
 </head>
 <body>
@@ -57,6 +96,10 @@
                     <div>
                         <img src="assets/icon/github-142-svgrepo-com.svg" alt="GitHub" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle;">
                         <a class="underline ml-1" href="https://github.com/manooi">GitHub</a>
+                    </div>
+                    <div class="no-print">
+                        <span style="display: inline-block; vertical-align: middle;">📄</span>
+                        <button class="underline ml-1" onclick="window.print()">Save as PDF</button>
                     </div>
                 </div>
             </div>
@@ -274,6 +317,10 @@
     }
 
     document.getElementById('it-years').textContent = `${getItYears()}+`;
+
+    // Browsers use <title> as the default PDF filename
+    window.addEventListener('beforeprint', () => document.title = 'Sirawit-Mahanin-Resume');
+    window.addEventListener('afterprint', () => document.title = 'Mahanin');
   </script>
 </body>
 </html>
