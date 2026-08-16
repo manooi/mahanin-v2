@@ -327,6 +327,9 @@ function dispatchAction(action, el) {
     case 'refresh':
       refreshDesktop();
       break;
+    case 'bin':
+      selectBinItem(el);
+      break;
     case 'shutdown':
       shutdown();
       break;
@@ -339,6 +342,19 @@ function dispatchAction(action, el) {
     default:
       break;
   }
+}
+
+// --- Recycle bin ----------------------------------------------------------
+
+// Every punchline is authored in the markup as data-note, so this only moves a string
+// into the status bar. The EMPTY button carries a note too and gets no selection, since
+// it is not a row in the list.
+function selectBinItem(el) {
+  const status = document.getElementById('bin-status');
+  if (status && el.dataset.note) status.textContent = el.dataset.note;
+  if (!el.classList.contains('bin-item')) return;
+  document.querySelectorAll('.bin-item.is-selected').forEach((item) => item.classList.remove('is-selected'));
+  el.classList.add('is-selected');
 }
 
 // --- Keyboard ------------------------------------------------------------

@@ -16,12 +16,13 @@ export const DEFS = {
   // taskman has no APPS entry either, but it is NOT parked: the taskbar's right-click
   // menu is its one and only opener. Deleting that menu strands it.
   taskman:  { x: 360, y: 190, w: 396, h: 236 },
+  recycle:  { x: 300, y: 120, w: 428, h: 322 },
 };
 
 // Static z only orders the parked windows against each other; nothing opens on load. Runtime topZ starts at 30 so every focus still wins.
 // readme is no longer a window — its content now renders directly on the desktop (.desktop-readme).
 // Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume/books removed); winamp is new, one above the old highest static z. Gaps are harmless.
-export const Z = { char: 13, projects: 15, contact: 20, winamp: 21, taskman: 22, welcome: 25 };
+export const Z = { char: 13, projects: 15, contact: 20, winamp: 21, taskman: 22, recycle: 23, welcome: 25 };
 
 // External hrefs (http…) get target="_blank" + rel="noopener noreferrer" by default;
 // internal ones stay same-tab unless the entry sets `newTab: true` (resume does — the
@@ -39,9 +40,11 @@ export const APPS = [
   { id: 'photo',    icon: '📷', gridLines: ['photos'],             startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
   { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             startLabel: 'say hi' },
+  { id: 'recycle',  icon: '🗑️', gridLines: ['recycle bin'],        startLabel: 'recycle bin' },
 ];
 
 export const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
 
 // Start menu mirrors APPS order; null entries are separators before shutdown.
-export const START_ORDER = ['resume', null, 'photo', 'books', 'contact', null];
+// recycle rides in the same group as contact rather than getting its own separator.
+export const START_ORDER = ['resume', null, 'photo', 'books', 'contact', 'recycle', null];

@@ -114,6 +114,22 @@ const SYSMON_ROWS = [
         </div>
       </Window>
 
+      <!-- Every row's punchline lives in its own data-note, so all the copy stays here
+           in the markup and os94.js only has to move a string into #bin-status. -->
+      <Window id="recycle" title="🗑️ recycle bin" x={DEFS.recycle.x} y={DEFS.recycle.y} w={DEFS.recycle.w} h={DEFS.recycle.h} z={Z.recycle} bodyClass="win-body--flush-x">
+        <div class="bin-list">
+          <button type="button" class="bin-item" data-action="bin" data-note="Three files. All of them are photographs of my cat. You looked, though. That's the part worth sitting with."><span class="bin-icon">📁</span><span class="bin-name">xxx</span><span class="bin-meta">3 items</span></button>
+          <button type="button" class="bin-item" data-action="bin" data-note="Empty. I moved everything to a password manager like an adult."><span class="bin-icon">📄</span><span class="bin-name">passwords.txt</span><span class="bin-meta">0 KB</span></button>
+          <button type="button" class="bin-item" data-action="bin" data-note="The largest folder on this machine by a comfortable margin. Restoring it is how the good ideas got made."><span class="bin-icon">📁</span><span class="bin-name">ideas_that_didnt_work</span><span class="bin-meta">214 items</span></button>
+          <button type="button" class="bin-item" data-action="bin" data-note="Deleted 2021. Load-bearing walls, cost sheets, a hard hat. I loved computers from the first one I ever played on — I still have no idea how I ended up a civil engineer."><span class="bin-icon">📐</span><span class="bin-name">civil_engineering_career.dwg</span><span class="bin-meta">12.4 MB</span></button>
+        </div>
+        <div class="bin-bar">
+          <button type="button" class="btn-9x btn-9x--sm" data-action="bin" data-note="Emptied. They came back. They always come back.">EMPTY RECYCLE BIN</button>
+          <span class="bin-count">4 items</span>
+        </div>
+        <div class="bin-status" id="bin-status">Click a file. Nothing in here is recoverable, emotionally or otherwise.</div>
+      </Window>
+
       <Window id="taskman" title="⚙️ taskman.exe" x={DEFS.taskman.x} y={DEFS.taskman.y} w={DEFS.taskman.w} h={DEFS.taskman.h} z={Z.taskman}>
         <div class="sec-label">TASK MANAGER</div>
         <p>You right&#8209;clicked the taskbar. Genuine respect for that.</p>
@@ -353,6 +369,9 @@ const SYSMON_ROWS = [
   .win-body--pad-lg { padding: 16px 18px 18px; }
   .win-body--char { background: #f6e8ef; color: #3a1c2b; }
   .win-body--flush { padding: 0; background: #3a3450; }
+  /* Explorer-style body: the list scrolls edge to edge, the status bar sits flush at
+     the bottom, so the usual body padding would break both. */
+  .win-body--flush-x { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
 
   /* ---------- primitives ---------- */
   .card { background: #fffdf7; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; padding: 10px 12px; }
@@ -365,6 +384,7 @@ const SYSMON_ROWS = [
     touch-action: manipulation;
   }
   .btn-9x:hover { background: #3a3450; color: #fff; border-color: #8a8275 #1a1626 #1a1626 #8a8275; }
+  .btn-9x--sm { padding: 6px 10px; font-size: 9.5px; }
   .btn-9x--power { margin-top: 22px; padding: 10px 16px; }
   .btn-9x--power:hover { background: #e07a3f; color: #fff; border-color: #fffdf7 #4a453c #4a453c #fffdf7; }
 
@@ -429,6 +449,27 @@ const SYSMON_ROWS = [
   .project-desc-sub { color: #6b6459; }
 
   .contact-rows { display: flex; flex-direction: column; gap: 6px; }
+
+  /* ---------- recycle bin ---------- */
+  .bin-list { flex: 1; overflow: auto; background: #fffdf7; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; margin: 10px 12px 0; }
+  .bin-item {
+    display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
+    background: none; border: none; padding: 7px 10px; cursor: pointer;
+    font: 400 12px 'IBM Plex Mono',monospace; color: #2a2620; touch-action: manipulation;
+  }
+  .bin-item:hover { background: #efe9dc; }
+  .bin-item.is-selected { background: #3a3450; color: #fff; }
+  .bin-icon { font-size: 15px; flex: none; }
+  .bin-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bin-meta { flex: none; font-size: 10.5px; color: #6b6459; }
+  .bin-item.is-selected .bin-meta { color: #c9c2ee; }
+  .bin-bar { display: flex; align-items: center; gap: 10px; padding: 9px 12px; }
+  .bin-count { font: 400 8.5px Silkscreen,monospace; color: #6b6459; }
+  .bin-status {
+    padding: 7px 11px; background: #d8d2c4; border-top: 2px solid #8a8275;
+    box-shadow: inset 0 2px 0 #fffdf7; font: 400 11px/1.5 'IBM Plex Mono',monospace; color: #4a453c;
+    min-height: 34px; box-sizing: border-box;
+  }
 
   /* ---------- menus ---------- */
   .menu-item { width: 100%; text-align: left; background: none; border: none; padding: 8px 14px 8px 12px; font: 400 10px Silkscreen,monospace; color: #2a2620; cursor: pointer; white-space: nowrap; touch-action: manipulation; }
@@ -521,6 +562,8 @@ const SYSMON_ROWS = [
     .icon { padding: 12px 4px 10px; }
     .icon-glyph { font-size: 33px; }
     .icon-label { font-size: 10px; }
+    /* Bin rows are a 30px hit area on the desktop — too tight for a thumb. */
+    .bin-item { padding: 11px 12px; }
     .desktop-readme {
       position: static; z-index: auto;
       top: auto; left: auto; right: auto; transform: none;
