@@ -1,0 +1,26 @@
+---
+interface Props {
+  glyph: string;
+  label: string;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+}
+
+const { glyph, label, top, right, bottom, left } = Astro.props;
+
+// Geometry lives exactly once, at the call site, and reaches CSS as custom properties —
+// same rule as <Window> and <StickyNote>. Only the sides actually passed are emitted.
+const sides: Record<string, number | undefined> = { '--top': top, '--right': right, '--bottom': bottom, '--left': left };
+const style = Object.entries(sides).filter(([, v]) => v !== undefined).map(([k, v]) => `${k}:${v}px`).join(';');
+---
+{/* A desktop shortcut for something that is not installed any more: faded, unlabelled by
+    any APPS entry, with no window behind it and nothing to click. It is a <div>, not a
+    button, and it inherits pointer-events: none from .widgets rather than opting out of
+    it — the one element in there that wants the overlay's default (invariant 8). Hidden
+    on mobile for free, since .widgets is display: none below 760px. */}
+<div class="ghost-icon" style={style} aria-hidden="true">
+  <span class="ghost-icon-glyph">{glyph}</span>
+  <span class="ghost-icon-label">{label}</span>
+</div>

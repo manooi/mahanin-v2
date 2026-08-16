@@ -6,6 +6,7 @@ import AppIcon from '../components/os94/AppIcon.astro';
 import StartItem from '../components/os94/StartItem.astro';
 import SysMon from '../components/os94/SysMon.astro';
 import NetGauge from '../components/os94/NetGauge.astro';
+import GhostIcon from '../components/os94/GhostIcon.astro';
 import NetworkIcon from '../components/os94/NetworkIcon.astro';
 import BrandIcon from '../components/os94/BrandIcon.astro';
 import { DEFS, Z, APPS, appsById, START_ORDER } from '../data/os94.js';
@@ -51,6 +52,8 @@ const SYSMON_ROWS = [
       </div>
 
       <div class="widgets">
+        <GhostIcon glyph="🐸" label="camfrog" top={18} right={22} />
+
         <StickyNote right={26} bottom={330} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
         <SysMon rows={SYSMON_ROWS} />
@@ -325,6 +328,17 @@ const SYSMON_ROWS = [
     background: #f2e27a; box-shadow: 3px 3px 0 rgba(0,0,0,.28); transform: rotate(var(--rot, -2.2deg));
     font: 400 12px/1.55 'IBM Plex Mono',monospace; color: #4a3d05; pointer-events: auto;
   }
+  /* Same shape as a real .icon so it reads as a shortcut, then faded down to a ghost.
+     No :hover, no cursor, no pointer-events opt-in — it is scenery, not an app. */
+  .ghost-icon {
+    position: absolute;
+    top: var(--top, auto); right: var(--right, auto); bottom: var(--bottom, auto); left: var(--left, auto);
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    width: 76px; padding: 8px 4px 6px; opacity: .3;
+  }
+  .ghost-icon-glyph { font-size: 29px; line-height: 1; filter: grayscale(.45) drop-shadow(2px 2px 0 rgba(0,0,0,.35)); }
+  .ghost-icon-label { font: 400 9.5px/1.35 Silkscreen,monospace; color: #fff; text-align: center; text-shadow: 1px 1px 0 rgba(0,0,0,.5); }
+
   .sticky-note-label { font: 400 10px/1.4 Silkscreen,monospace; color: #8a6f0e; margin-bottom: 7px; }
   .sticky-note-sign { margin-top: 8px; font-size: 10.5px; color: #8a6f0e; }
   .sticky-note--mint { background: #a8e6cf; color: #123f36; }
