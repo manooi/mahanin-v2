@@ -53,9 +53,12 @@ const SYSMON_ROWS = [
       </div>
 
       <div class="widgets">
-        <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={-2.5} />
+        {/* camflock comes first so the photo, later in the DOM, paints over it — the icon
+            is tucked under the photo's bottom edge like something the photo was dropped on
+            top of. Drag the photo away and the whole frog is there. */}
+        <GhostIcon glyph="🐸" label="camflock" top={170} right={48} />
 
-        <GhostIcon glyph="🐸" label="camflock" top={194} right={48} />
+        <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={-2.5} />
 
         <StickyNote right={26} bottom={226} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
