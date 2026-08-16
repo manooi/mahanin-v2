@@ -1,0 +1,10 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+{/* Hand-drawn arrow + scrawl, anchored inside its icon. Decorative: aria-hidden, and
+    pointer-events: none in CSS so clicks fall through to the icon link underneath. */}
+<span class="icon-doodle" aria-hidden="true"><svg class="icon-doodle-arrow" viewBox="0 0 72 34" fill="none"><path d="M68 30C55 30.5 32 27 9 11" stroke="currentColor" stroke-width="3" stroke-linecap="round" /><path d="M7 10 14 22M7 10 20 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg><span class="icon-doodle-text">{text}</span></span>

@@ -195,6 +195,26 @@ function poweron() {
 
 // --- Clock / uptime -------------------------------------------------------
 
+// Uptime is an exact age off the real birthday, 10 Nov 1994. The old version counted
+// days from a 1 Jan 1994 epoch and split them with /365 and %365, which overshot by a
+// whole year before November and drifted a day per leap year. Compare date-only UTC
+// midnights so DST shifts can never round the day count off by one.
+const BIRTH_YEAR = 1994;
+const BIRTH_MONTH = 10; // zero-based: November
+const BIRTH_DATE = 10;
+
+function uptimeText(now) {
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  let years = now.getFullYear() - BIRTH_YEAR;
+  let anniversary = Date.UTC(now.getFullYear(), BIRTH_MONTH, BIRTH_DATE);
+  if (today < anniversary) {
+    years -= 1;
+    anniversary = Date.UTC(now.getFullYear() - 1, BIRTH_MONTH, BIRTH_DATE);
+  }
+  const days = Math.round((today - anniversary) / 86400000);
+  return years + 'y ' + days + 'd';
+}
+
 function tick() {
   const now = new Date();
   let hours = now.getHours();
@@ -204,9 +224,8 @@ function tick() {
   const clockEl = document.getElementById('clock');
   if (clockEl) clockEl.textContent = hours + ':' + minutes + ' ' + ampm;
 
-  const days = Math.floor((now - new Date(1994, 0, 1)) / 86400000);
   const uptimeEl = document.getElementById('uptime');
-  if (uptimeEl) uptimeEl.textContent = Math.floor(days / 365) + 'y ' + (days % 365) + 'd';
+  if (uptimeEl) uptimeEl.textContent = uptimeText(now);
 }
 
 // --- Menus / wallpaper -----------------------------------------------------
@@ -324,29 +343,11 @@ function initListeners() {
   });
 
   window.addEventListener('keydown', onBootKeydown);
-
-  const welcomeStartup = document.getElementById('welcome-startup');
-  if (welcomeStartup) {
-    welcomeStartup.addEventListener('change', () => {
-      try {
-        if (welcomeStartup.checked) {
-          localStorage.removeItem('os94-welcome');
-        } else {
-          localStorage.setItem('os94-welcome', 'off');
-        }
-      } catch (e) {}
-    });
-  }
 }
 
 function init() {
-  try {
-    if (localStorage.getItem('os94-welcome') === 'off') {
-      const win = getWin('welcome');
-      if (win) win.classList.remove('is-open');
-    }
-  } catch (e) {}
-
+  // No window opens at startup — the desktop icon doodle does the onboarding now.
+  // Nothing here may touch open/min state: the server HTML is already correct.
   initListeners();
   tick();
   setInterval(tick, 1000);

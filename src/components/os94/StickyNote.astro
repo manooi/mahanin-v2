@@ -1,0 +1,32 @@
+---
+interface Props {
+  label?: string;
+  sign?: string;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+  w?: number;
+  rotate?: number;
+  tint?: 'mint' | 'pink';
+}
+
+const { label = 'STICKY NOTE', sign, top, right, bottom, left, w = 180, rotate = -2.2, tint } = Astro.props;
+
+// Geometry lives exactly once, at the call site, and reaches CSS as custom properties —
+// same rule as <Window>. Only the sides actually passed are emitted, so a note can hang
+// off any corner; the rest fall back to `auto` in the stylesheet.
+const sides: Record<string, number | undefined> = { '--top': top, '--right': right, '--bottom': bottom, '--left': left };
+const style = [
+  ...Object.entries(sides).filter(([, v]) => v !== undefined).map(([k, v]) => `${k}:${v}px`),
+  `--w:${w}px`,
+  `--rot:${rotate}deg`,
+].join(';');
+
+const noteClass = ['sticky-note', tint ? `sticky-note--${tint}` : ''].filter(Boolean).join(' ');
+---
+<div class={noteClass} style={style}>
+  {label && <div class="sticky-note-label">{label}</div>}
+  <slot />
+  {sign && <div class="sticky-note-sign">{sign}</div>}
+</div>

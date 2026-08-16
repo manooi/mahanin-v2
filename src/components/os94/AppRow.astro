@@ -1,0 +1,14 @@
+---
+import { linkAttrs } from '../../data/os94.js';
+
+interface Props {
+  app: Record<string, any>;
+}
+
+const { app } = Astro.props;
+
+// Mobile list row. Same dynamic-tag trick as AppIcon; no doodle here by design.
+const Tag = app.href ? 'a' : 'button';
+const attrs = app.href ? { href: app.href, ...linkAttrs(app) } : { type: 'button', 'data-app': app.id };
+---
+<Tag class="m-row" {...attrs}><span class="m-row-icon">{app.icon}</span><span class="m-row-label">{app.mobileLabel}</span><span class="m-row-arrow">▶</span></Tag>

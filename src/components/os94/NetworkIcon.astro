@@ -1,0 +1,10 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'network: connected' } = Astro.props;
+---
+{/* Win95 Network Neighborhood, hand-plotted on a 16×16 grid: back PC, then the cable,
+    then the front PC painted over it. Decorative tray status glyph, not a button. */}
+<span class="tray-net" title={title} aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><rect x="0" y="0" width="9" height="8" fill="#000" /><rect x="1" y="1" width="7" height="6" fill="#c0c0c0" /><rect x="2" y="2" width="5" height="4" fill="#0000c8" /><rect x="2" y="2" width="1" height="2" fill="#0ff" /><rect x="0" y="8" width="9" height="3" fill="#000" /><rect x="0" y="8" width="8" height="2" fill="#c0c0c0" /><rect x="1" y="9" width="1" height="1" fill="#0f0" /><rect x="0" y="13" width="9" height="1" fill="#000" /><rect x="2" y="11" width="4" height="4" fill="#000" /><rect x="3" y="12" width="2" height="2" fill="#ff0" /><rect x="6" y="5" width="10" height="9" fill="#000" /><rect x="7" y="6" width="8" height="7" fill="#c0c0c0" /><rect x="8" y="7" width="6" height="5" fill="#008080" /><rect x="8" y="7" width="1" height="2" fill="#0ff" /><rect x="6" y="13" width="10" height="3" fill="#000" /><rect x="6" y="13" width="9" height="2" fill="#c0c0c0" /><rect x="7" y="14" width="1" height="1" fill="#0f0" /><rect x="10" y="14" width="4" height="1" fill="#808080" /></svg></span>

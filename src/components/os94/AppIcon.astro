@@ -1,0 +1,17 @@
+---
+import DoodleArrow from './DoodleArrow.astro';
+import { linkAttrs } from '../../data/os94.js';
+
+interface Props {
+  app: Record<string, any>;
+}
+
+const { app } = Astro.props;
+
+// One element covers both cases: Astro renders a capitalised variable as a dynamic tag,
+// so the link and button variants no longer duplicate the icon face between them.
+// Entries with an href are plain links; the rest carry data-app and open a window.
+const Tag = app.href ? 'a' : 'button';
+const attrs = app.href ? { href: app.href, ...linkAttrs(app) } : { type: 'button', 'data-app': app.id };
+---
+<Tag class="icon" {...attrs}><span class="icon-glyph">{app.icon}</span><span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span>{app.doodle && <DoodleArrow text={app.doodle} />}</Tag>

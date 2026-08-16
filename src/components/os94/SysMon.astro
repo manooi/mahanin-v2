@@ -1,0 +1,27 @@
+---
+interface Row {
+  label: string;
+  value?: string;
+  id?: string;
+}
+
+interface Props {
+  title?: string;
+  rows: Row[];
+}
+
+const { title = 'SYSTEM MONITOR', rows } = Astro.props;
+
+// Labels are padded to the widest one so the · separators line up in the mono font.
+// &nbsp; rather than spaces: Astro collapses runs of ordinary whitespace.
+const width = Math.max(...rows.map((row) => row.label.length));
+const pad = (label) => '\u00a0'.repeat(width - label.length);
+---
+<div class="sysmon">
+  <div class="sysmon-label">{title}</div>
+  <div class="sysmon-body">
+    {rows.map((row, i) => (
+      <Fragment>{i > 0 && <br />}{row.label}{pad(row.label)}&nbsp;·&nbsp;{row.id ? <span id={row.id}>{row.value ?? '—'}</span> : row.value}</Fragment>
+    ))}
+  </div>
+</div>

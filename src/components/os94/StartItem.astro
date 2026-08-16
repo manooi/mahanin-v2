@@ -1,0 +1,15 @@
+---
+import { linkAttrs } from '../../data/os94.js';
+
+interface Props {
+  app: Record<string, any>;
+}
+
+const { app } = Astro.props;
+
+// Start-menu row. Callers pass appsById[id]; a stale id in START_ORDER still blows up
+// here rather than rendering a blank row, which is the intended loud failure.
+const Tag = app.href ? 'a' : 'button';
+const attrs = app.href ? { href: app.href, ...linkAttrs(app) } : { type: 'button', 'data-app': app.id };
+---
+<Tag class="start-item" {...attrs}><span class="start-item-icon">{app.icon}</span>{app.startLabel}</Tag>
