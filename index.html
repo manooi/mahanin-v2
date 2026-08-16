@@ -24,7 +24,7 @@
 
     /* Borderless: plain white page, centered content column */
     .resume-box {
-        margin: 0 25% 2rem;
+        margin: 0 18% 2rem;
         padding: 0.5rem 2.5rem 2rem;
     }
 
@@ -54,17 +54,8 @@
             font-size: 12px;
         }
 
-        #header img[alt="Sirawit Mahanin profile picture"] {
-            width: 160px !important;
-        }
-
         .no-print {
             display: none;
-        }
-
-        /* Paper width falls under the md: breakpoint; force the photo back */
-        #header .hidden {
-            display: block;
         }
 
         .resume-box {
@@ -107,9 +98,6 @@
                         <button class="underline ml-1" onclick="window.print()">Save as PDF</button>
                     </div>
                 </div>
-            </div>
-            <div class="hidden md:block">
-                <img class="rounded-lg" style="width: 225px;" src="assets/profile.webp" loading="lazy" alt="Sirawit Mahanin profile picture">
             </div>
         </section>
 
