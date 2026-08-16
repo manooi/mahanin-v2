@@ -13,7 +13,6 @@ const BOOT = [
 ];
 
 let topZ = 30;
-let wallIndex = 0;
 let bootTimer = null;
 let bootCount = 0;
 const mq = window.matchMedia('(max-width: 759px)');
@@ -214,9 +213,7 @@ function tick() {
 
 function closeMenus() {
   const startMenu = document.getElementById('start-menu');
-  const ctxMenu = document.getElementById('ctx-menu');
   if (startMenu) startMenu.classList.remove('is-visible');
-  if (ctxMenu) ctxMenu.classList.remove('is-visible');
 }
 
 function toggleStart() {
@@ -225,27 +222,6 @@ function toggleStart() {
   const wasOpen = startMenu.classList.contains('is-visible');
   closeMenus();
   if (!wasOpen) startMenu.classList.add('is-visible');
-}
-
-function openCtxMenu(e) {
-  if (mq.matches) return;
-  e.preventDefault();
-  const ctxMenu = document.getElementById('ctx-menu');
-  if (!ctxMenu) return;
-  const left = Math.min(e.clientX, window.innerWidth - 190);
-  const top = Math.min(e.clientY, window.innerHeight - 200);
-  ctxMenu.style.left = left + 'px';
-  ctxMenu.style.top = top + 'px';
-  const startMenu = document.getElementById('start-menu');
-  if (startMenu) startMenu.classList.remove('is-visible');
-  ctxMenu.classList.add('is-visible');
-}
-
-function cycleWall() {
-  wallIndex = (wallIndex + 1) % 4;
-  const wallpaper = document.getElementById('wallpaper');
-  if (wallpaper) wallpaper.dataset.wall = String(wallIndex);
-  closeMenus();
 }
 
 function copyToClipboard(text, btn) {
@@ -295,9 +271,6 @@ function dispatchAction(action, el) {
     case 'poweron':
       poweron();
       break;
-    case 'wall':
-      cycleWall();
-      break;
     case 'copy':
       if (el.dataset.copyText) copyToClipboard(el.dataset.copyText, el);
       break;
@@ -332,11 +305,7 @@ function initListeners() {
       const inMenu = e.target.closest && e.target.closest('[data-menu]');
       if (inMenu) return;
       const startMenu = document.getElementById('start-menu');
-      const ctxMenu = document.getElementById('ctx-menu');
-      const menuVisible =
-        (startMenu && startMenu.classList.contains('is-visible')) ||
-        (ctxMenu && ctxMenu.classList.contains('is-visible'));
-      if (menuVisible) closeMenus();
+      if (startMenu && startMenu.classList.contains('is-visible')) closeMenus();
     },
     true
   );
@@ -355,9 +324,6 @@ function initListeners() {
   });
 
   window.addEventListener('keydown', onBootKeydown);
-
-  const desktop = document.getElementById('desktop');
-  if (desktop) desktop.addEventListener('contextmenu', openCtxMenu);
 
   const welcomeStartup = document.getElementById('welcome-startup');
   if (welcomeStartup) {

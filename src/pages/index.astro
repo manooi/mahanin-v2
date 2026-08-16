@@ -11,18 +11,18 @@ const ogDescription = 'Consultant Developer at Thoughtworks, Bangkok. Resume, ph
 // Window geometry — single source of truth (design's DEFS table). Never duplicate into JS.
 const DEFS = {
   welcome:  { x: 430, y: 80,  w: 450, h: 367 },
-  readme:   { x: 236, y: 44,  w: 460, h: 336 },
   // char, projects, and winamp are parked: no APPS entry, so none of them has an opener
-  // anywhere (icon grid/mobile/start/ctx menu). Still rendered + closed in the DOM;
+  // anywhere (icon grid/mobile/start menu). Still rendered + closed in the DOM;
   // restorable by re-adding the corresponding entry to APPS below.
   char:     { x: 392, y: 110, w: 458, h: 452 },
   projects: { x: 352, y: 150, w: 452, h: 356 },
   winamp:   { x: 520, y: 430, w: 276, h: 168 },
   contact:  { x: 420, y: 138, w: 408, h: 243 },
 };
-// welcome opens above the other 5 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
+// welcome opens above the other 4 (z=25) so it lands on top of the rest on load; runtime topZ starts at 30 so later focuses still win.
+// readme is no longer a window — its content now renders directly on the desktop (.desktop-readme).
 // Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume/books removed); winamp is new, one above the old highest static z. Gaps are harmless.
-const Z = { readme: 10, char: 13, projects: 15, contact: 20, winamp: 21, welcome: 25 };
+const Z = { char: 13, projects: 15, contact: 20, winamp: 21, welcome: 25 };
 
 // Apps drive the icon grid, mobile menu, and start menu. An entry with `href` renders
 // as a link (no window) instead of a `data-app` opener. External hrefs (http…) get
@@ -30,7 +30,6 @@ const Z = { readme: 10, char: 13, projects: 15, contact: 20, winamp: 21, welcome
 const linkAttrs = (href) => (href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {});
 const APPS = [
   { id: 'welcome',  icon: '👋', gridLines: ['welcome'],           mobileLabel: 'welcome',           startLabel: 'welcome' },
-  { id: 'readme',   icon: '📝', gridLines: ['readme.txt'],        mobileLabel: 'readme.txt',        startLabel: 'readme.txt' },
   { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)', href: '/resume/' },
   { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
   { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
@@ -38,7 +37,7 @@ const APPS = [
 ];
 const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
 // Start menu mirrors APPS order; null entries are separators before shutdown.
-const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'contact', null];
+const START_ORDER = ['welcome', 'resume', null, 'photo', 'books', 'contact', null];
 ---
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
   <Fragment slot="head">
@@ -49,7 +48,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
   <main id="os" class="os-root is-booting">
     <noscript><style>.screen-boot{display:none!important}</style></noscript>
 
-    <div id="wallpaper" class="wallpaper" data-wall="0"></div>
+    <div id="wallpaper" class="wallpaper"></div>
 
     <div id="desktop" class="desktop">
       <div id="icons" class="icons">
@@ -74,6 +73,18 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
         </div>
       </div>
 
+      <div class="desktop-readme">
+        <h1 class="readme-title">HELLO, VISITOR</h1>
+        <div class="readme-subtitle">SIRAWIT &ldquo;WIT&rdquo; MAHANIN · EST. 1994</div>
+        <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do.</p>
+        <p>I take pictures and read books.</p>
+        <p>Why mahanin.com? I wanted sirawit.com, but it was taken. And no, I&rsquo;m not the only Mahanin.</p>
+        <div class="card readme-tip">
+          <span class="tip-arrow">&gt;</span> tip: the <strong>resume</strong> folder is the polite one.<br>
+          <span class="tip-arrow">&gt;</span> everything else is the real me.<span class="blink-cursor">_</span>
+        </div>
+      </div>
+
       <div class="widgets">
         <div class="sticky-note">
           <div class="sticky-note-label">STICKY NOTE</div>
@@ -94,24 +105,11 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
         <p>Quick menu.</p>
         <a href="/resume/" class="row welcome-primary">👔 <span class="row-label">open the resume</span><span class="row-badge">FOR HR &mdash; PRINTABLE PDF</span></a>
         <div class="contact-rows">
-          <button type="button" class="row" data-app="readme">📝 <span class="row-label">who is this guy?</span></button>
           <a href="https://unsplash.com/@souperwit" target="_blank" rel="noopener noreferrer" class="row">📷 <span class="row-label">photos</span></a>
           <button type="button" class="row" data-app="contact">✉️ <span class="row-label">say hi</span></button>
         </div>
         <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@souperwit">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="https://www.goodreads.com/user/show/177765370-sirawit-mahanin">Goodreads</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
         <label class="welcome-startup"><input type="checkbox" id="welcome-startup" checked> show this window at startup</label>
-      </Window>
-
-      <Window id="readme" title="📝 readme.txt" x={DEFS.readme.x} y={DEFS.readme.y} w={DEFS.readme.w} h={DEFS.readme.h} z={Z.readme} bodyClass="win-body--pad-lg">
-        <h1 class="readme-title">HELLO, VISITOR</h1>
-        <div class="readme-subtitle">SIRAWIT &ldquo;WIT&rdquo; MAHANIN · EST. 1994</div>
-        <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do.</p>
-        <p>I take pictures and read books.</p>
-        <p>Why mahanin.com? I wanted sirawit.com, but it was taken. And no, I&rsquo;m not the only Mahanin.</p>
-        <div class="card readme-tip">
-          <span class="tip-arrow">&gt;</span> tip: the <strong>resume</strong> folder is the polite one.<br>
-          <span class="tip-arrow">&gt;</span> everything else is the real me.<span class="blink-cursor">_</span>
-        </div>
       </Window>
 
       <Window id="char" title="🍁 character.dat" x={DEFS.char.x} y={DEFS.char.y} w={DEFS.char.w} h={DEFS.char.h} z={Z.char} variant="char">
@@ -180,12 +178,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
           </div>
         </div>
       </Window>
-
-      <div id="ctx-menu" class="ctx-menu" data-menu="ctx">
-        <button type="button" class="menu-item" data-action="wall">change wallpaper</button>
-        <div class="menu-sep"></div>
-        <button type="button" class="menu-item" data-app="readme">about this desktop</button>
-      </div>
     </div>
 
     <div id="start-menu" class="start-menu" data-menu="start">
@@ -278,11 +270,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
     overflow: hidden;
   }
-  .wallpaper { position: absolute; inset: 0; }
-  .wallpaper[data-wall="0"] { background: #0e5750; background-image: radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px); background-size: 4px 4px; }
-  .wallpaper[data-wall="1"] { background: #2b2450; background-image: linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px); background-size: 26px 26px; }
-  .wallpaper[data-wall="2"] { background: #7a3a2e; background-image: repeating-linear-gradient(180deg,rgba(255,220,150,.13) 0 12px,transparent 12px 40px); }
-  .wallpaper[data-wall="3"] { background: #7c8f4a; background-image: repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 3px,transparent 3px 6px); }
+  .wallpaper { position: absolute; inset: 0; background: #0e5750; background-image: radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px); background-size: 4px 4px; }
 
   .desktop { position: absolute; top: 0; left: 0; right: 0; bottom: 44px; overflow: hidden; }
 
@@ -313,6 +301,17 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
   .m-row-icon { font-size: 19px; }
   .m-row-label { flex: 1; font: 400 10px Silkscreen,monospace; color: #2a2620; }
   .m-row-arrow { color: #8a3b12; }
+
+  /* ---------- readme-on-desktop ----------
+     Single source in the DOM for both breakpoints (see mobile section below):
+     desktop centers it absolutely between the icon column and the widgets;
+     mobile lets it flow in normal document order below the app menu instead. */
+  .desktop-readme {
+    position: absolute; z-index: 1;
+    top: 50%; left: 140px; right: 250px; transform: translateY(-50%);
+    width: 480px; max-width: 100%; margin: 0 auto;
+  }
+  .desktop-readme p { font: 400 12.5px/1.7 'IBM Plex Mono',monospace; color: #dff5f0; margin: 0 0 10px; }
 
   /* ---------- desktop widgets ---------- */
   .widgets { position: absolute; inset: 0; z-index: 1; }
@@ -420,9 +419,9 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
   .welcome-startup { display: flex; align-items: center; gap: 7px; margin-top: 14px; font: 400 11px 'IBM Plex Mono',monospace; color: #6b6459; cursor: pointer; }
   .welcome-startup input { accent-color: #e07a3f; width: 13px; height: 13px; cursor: pointer; }
 
-  .readme-title { font: 400 19px/1.3 Silkscreen,monospace; color: #2a2620; margin: 0 0 4px; }
-  .readme-subtitle { font: 400 16px/1.4 Silkscreen,monospace; color: #8a3b12; margin-bottom: 14px; }
-  .readme-tip { font-size: 11.5px; line-height: 1.7; }
+  .readme-title { font: 400 19px/1.3 Silkscreen,monospace; color: #fffdf7; margin: 0 0 4px; }
+  .readme-subtitle { font: 400 16px/1.4 Silkscreen,monospace; color: #f2c14b; margin-bottom: 14px; }
+  .readme-tip { font-size: 11.5px; line-height: 1.7; color: #2a2620; }
   .tip-arrow { color: #8a3b12; }
   .noscript-links { margin: 14px 0 0; font-size: 11.5px; }
 
@@ -456,9 +455,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
   .menu-item:hover { background: #3a3450; color: #fff; }
   .menu-sep { height: 2px; margin: 3px 4px; background: #8a8275; box-shadow: 0 1px 0 #fffdf7; }
   .start-menu .menu-sep { margin: 4px 6px; }
-
-  .ctx-menu { position: absolute; left: 0; top: 0; display: none; min-width: 176px; padding: 4px 0; background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7; box-shadow: 4px 4px 0 rgba(0,0,0,.4); z-index: 8600; }
-  .ctx-menu.is-visible { display: block; }
 
   .start-menu { position: absolute; left: 8px; bottom: 46px; width: 236px; max-height: calc(100% - 60px); overflow: auto; display: none; background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7; box-shadow: 4px 4px 0 rgba(0,0,0,.4); z-index: 8500; }
   .start-menu.is-visible { display: flex; }
@@ -512,7 +508,17 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'books', 'con
   /* ---------- mobile ---------- */
   @media (max-width: 759px) {
     .icons, .widgets, .tray { display: none; }
-    .mobile-menu { display: block; }
+    /* .mobile-menu no longer covers the whole desktop: it flows in normal
+       document order above .desktop-readme, and .desktop scrolls to reach both —
+       this is what keeps the bio reachable on mobile without a second copy of it. */
+    .desktop { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .mobile-menu { display: block; position: static; inset: auto; overflow: visible; }
+    .desktop-readme {
+      position: static; z-index: auto;
+      top: auto; left: auto; right: auto; transform: none;
+      width: auto; max-width: none; margin: 0;
+      padding: 22px 18px 32px; border-top: 1px dotted rgba(255,255,255,.25);
+    }
     .win { position: fixed; left: 6px; right: 6px; top: 6px; bottom: 50px; width: auto; height: auto; }
     .start-menu { left: 8px; right: 8px; width: auto; }
   }
