@@ -1,0 +1,405 @@
+// Mahanin OS 94 — retro desktop hub behavior. Vanilla JS, no dependencies.
+// DOM is the state: open/min are classes, position/z are custom properties,
+// guest entries are child nodes, wallpaper is a data attribute.
+
+const BOOT = [
+  'MEMORY TEST ............ OK',
+  'LOADING PERSONALITY .... OK',
+  'MOUNTING /photos ....... OK',
+  'MOUNTING /books ........ 1 IN PROGRESS',
+  'MAPLESTORY.EXE ......... FOUND',
+  'RESUME.DOC ............. TIDY, FOR HR',
+  'READY.'
+];
+
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+let topZ = 30;
+let wallIndex = 0;
+let bootTimer = null;
+let bootCount = 0;
+const mq = window.matchMedia('(max-width: 759px)');
+
+function getWin(id) {
+  return document.getElementById('win-' + id);
+}
+
+function readVar(el, name, fallback) {
+  const value = parseFloat(el.style.getPropertyValue(name));
+  return Number.isNaN(value) ? fallback : value;
+}
+
+function setVarPx(el, name, value) {
+  el.style.setProperty(name, value + 'px');
+}
+
+// --- Window manager -------------------------------------------------------
+
+function openWin(id) {
+  const win = getWin(id);
+  if (!win) return;
+  win.classList.add('is-open');
+  win.classList.remove('is-min');
+  if (!mq.matches) {
+    const w = readVar(win, '--w', win.offsetWidth);
+    const h = readVar(win, '--h', win.offsetHeight);
+    const curX = readVar(win, '--x', 0);
+    const curY = readVar(win, '--y', 0);
+    const maxX = Math.max(16, window.innerWidth - w - 24);
+    const maxY = Math.max(10, window.innerHeight - 44 - h - 12);
+    setVarPx(win, '--x', Math.min(curX, maxX));
+    setVarPx(win, '--y', Math.min(curY, maxY));
+  }
+  focusWin(id);
+  closeMenus();
+  renderTaskbar();
+}
+
+function focusWin(id) {
+  const win = getWin(id);
+  if (!win) return;
+  topZ += 1;
+  win.style.setProperty('--z', String(topZ));
+  win.classList.remove('is-min');
+}
+
+function minWin(id) {
+  const win = getWin(id);
+  if (!win) return;
+  win.classList.add('is-min');
+  renderTaskbar();
+}
+
+function closeWin(id) {
+  const win = getWin(id);
+  if (!win) return;
+  win.classList.remove('is-open', 'is-min');
+  renderTaskbar();
+}
+
+function isTopWindow(win) {
+  const z = readVar(win, '--z', 0);
+  let isTop = true;
+  document.querySelectorAll('.win.is-open:not(.is-min)').forEach((other) => {
+    if (other === win) return;
+    if (readVar(other, '--z', 0) > z) isTop = false;
+  });
+  return isTop;
+}
+
+function taskClick(id) {
+  const win = getWin(id);
+  if (!win) return;
+  const isMin = win.classList.contains('is-min');
+  if (!isMin && isTopWindow(win)) {
+    minWin(id);
+  } else {
+    focusWin(id);
+    renderTaskbar();
+  }
+}
+
+function renderTaskbar() {
+  const container = document.getElementById('taskbar-btns');
+  if (!container) return;
+  container.innerHTML = '';
+  document.querySelectorAll('.win.is-open').forEach((win) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'task-btn';
+    if (win.classList.contains('is-min')) btn.classList.add('is-min');
+    btn.dataset.task = win.dataset.win;
+    btn.textContent = win.dataset.label || win.dataset.win;
+    container.appendChild(btn);
+  });
+}
+
+// --- Drag -------------------------------------------------------------
+
+function startDrag(win, e) {
+  e.preventDefault();
+  const id = win.dataset.win;
+  focusWin(id);
+  const startX = e.clientX;
+  const startY = e.clientY;
+  const originX = readVar(win, '--x', 0);
+  const originY = readVar(win, '--y', 0);
+
+  function onMove(ev) {
+    const nx = Math.max(0, Math.min(originX + ev.clientX - startX, window.innerWidth - 70));
+    const ny = Math.max(0, Math.min(originY + ev.clientY - startY, window.innerHeight - 90));
+    setVarPx(win, '--x', nx);
+    setVarPx(win, '--y', ny);
+  }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+// --- Boot / shutdown ----------------------------------------------------
+
+function appendBootLine(text) {
+  const container = document.getElementById('boot-lines');
+  if (!container) return;
+  const line = document.createElement('div');
+  line.textContent = text;
+  container.appendChild(line);
+}
+
+function startBoot() {
+  bootTimer = setInterval(() => {
+    if (bootCount >= BOOT.length) {
+      clearInterval(bootTimer);
+      bootTimer = null;
+      endBoot();
+      return;
+    }
+    appendBootLine(BOOT[bootCount]);
+    bootCount += 1;
+  }, 340);
+}
+
+function skipBoot() {
+  if (bootTimer) {
+    clearInterval(bootTimer);
+    bootTimer = null;
+  }
+  const os = document.getElementById('os');
+  if (os && os.classList.contains('is-booting')) endBoot();
+}
+
+function endBoot() {
+  if (bootTimer) {
+    clearInterval(bootTimer);
+    bootTimer = null;
+  }
+  const os = document.getElementById('os');
+  if (os) os.classList.remove('is-booting');
+  window.removeEventListener('keydown', onBootKeydown);
+}
+
+function onBootKeydown() {
+  skipBoot();
+}
+
+function shutdown() {
+  const os = document.getElementById('os');
+  if (os) os.classList.add('is-off');
+  closeMenus();
+}
+
+function poweron() {
+  const os = document.getElementById('os');
+  if (os) os.classList.remove('is-off');
+}
+
+// --- Clock / uptime -------------------------------------------------------
+
+function tick() {
+  const now = new Date();
+  let hours = now.getHours();
+  const ampm = hours < 12 ? 'AM' : 'PM';
+  hours = hours % 12 || 12;
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const clockEl = document.getElementById('clock');
+  if (clockEl) clockEl.textContent = hours + ':' + minutes + ' ' + ampm;
+
+  const days = Math.floor((now - new Date(1994, 0, 1)) / 86400000);
+  const uptimeEl = document.getElementById('uptime');
+  if (uptimeEl) uptimeEl.textContent = Math.floor(days / 365) + 'y ' + (days % 365) + 'd';
+}
+
+// --- Menus / wallpaper / arrange ------------------------------------------
+
+function closeMenus() {
+  const startMenu = document.getElementById('start-menu');
+  const ctxMenu = document.getElementById('ctx-menu');
+  if (startMenu) startMenu.classList.remove('is-visible');
+  if (ctxMenu) ctxMenu.classList.remove('is-visible');
+}
+
+function toggleStart() {
+  const startMenu = document.getElementById('start-menu');
+  if (!startMenu) return;
+  const wasOpen = startMenu.classList.contains('is-visible');
+  closeMenus();
+  if (!wasOpen) startMenu.classList.add('is-visible');
+}
+
+function openCtxMenu(e) {
+  if (mq.matches) return;
+  e.preventDefault();
+  const ctxMenu = document.getElementById('ctx-menu');
+  if (!ctxMenu) return;
+  const left = Math.min(e.clientX, window.innerWidth - 190);
+  const top = Math.min(e.clientY, window.innerHeight - 200);
+  ctxMenu.style.left = left + 'px';
+  ctxMenu.style.top = top + 'px';
+  const startMenu = document.getElementById('start-menu');
+  if (startMenu) startMenu.classList.remove('is-visible');
+  ctxMenu.classList.add('is-visible');
+}
+
+function cycleWall() {
+  wallIndex = (wallIndex + 1) % 4;
+  const wallpaper = document.getElementById('wallpaper');
+  if (wallpaper) wallpaper.dataset.wall = String(wallIndex);
+  closeMenus();
+}
+
+function toggleArrange() {
+  const icons = document.getElementById('icons');
+  if (icons) icons.classList.toggle('one-col');
+  closeMenus();
+}
+
+// --- Guestbook --------------------------------------------------------
+
+function updateVisitorNo() {
+  const list = document.getElementById('guest-list');
+  const visitorEl = document.getElementById('guest-visitor');
+  if (!list || !visitorEl) return;
+  visitorEl.textContent = 'OO' + String(1994 + list.children.length).padStart(6, '0').slice(2);
+}
+
+function signGuest() {
+  const input = document.getElementById('guest-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const now = new Date();
+  const when = MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+
+  const entry = document.createElement('div');
+  entry.className = 'card guest-entry';
+
+  const meta = document.createElement('div');
+  meta.className = 'guest-entry-meta';
+  meta.textContent = 'you · ' + when;
+  entry.appendChild(meta);
+
+  const body = document.createElement('div');
+  body.className = 'guest-entry-text';
+  body.textContent = text;
+  entry.appendChild(body);
+
+  const list = document.getElementById('guest-list');
+  if (list) list.insertBefore(entry, list.firstChild);
+
+  input.value = '';
+  updateVisitorNo();
+}
+
+// --- Dispatch / listeners ---------------------------------------------
+
+function dispatchAction(action, el) {
+  switch (action) {
+    case 'min': {
+      const win = el.closest('.win');
+      if (win) minWin(win.dataset.win);
+      break;
+    }
+    case 'close': {
+      const win = el.closest('.win');
+      if (win) closeWin(win.dataset.win);
+      break;
+    }
+    case 'start':
+      toggleStart();
+      break;
+    case 'shutdown':
+      shutdown();
+      break;
+    case 'poweron':
+      poweron();
+      break;
+    case 'wall':
+      cycleWall();
+      break;
+    case 'arrange':
+      toggleArrange();
+      break;
+    case 'sign':
+      signGuest();
+      break;
+    default:
+      break;
+  }
+}
+
+function initListeners() {
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-app],[data-action],[data-task]');
+    if (!el) return;
+    if (el.dataset.app) {
+      openWin(el.dataset.app);
+      return;
+    }
+    if (el.dataset.task) {
+      taskClick(el.dataset.task);
+      return;
+    }
+    if (el.dataset.action) dispatchAction(el.dataset.action, el);
+  });
+
+  document.addEventListener(
+    'mousedown',
+    (e) => {
+      const os = document.getElementById('os');
+      if (os && os.classList.contains('is-booting')) {
+        skipBoot();
+        return;
+      }
+      const inMenu = e.target.closest && e.target.closest('[data-menu]');
+      if (inMenu) return;
+      const startMenu = document.getElementById('start-menu');
+      const ctxMenu = document.getElementById('ctx-menu');
+      const menuVisible =
+        (startMenu && startMenu.classList.contains('is-visible')) ||
+        (ctxMenu && ctxMenu.classList.contains('is-visible'));
+      if (menuVisible) closeMenus();
+    },
+    true
+  );
+
+  document.addEventListener('mousedown', (e) => {
+    if (e.button !== 0 || mq.matches) return;
+    if (e.target.closest('.win-btn')) return;
+    const titleBar = e.target.closest('.win-title');
+    if (!titleBar) return;
+    const win = titleBar.closest('.win');
+    if (!win) return;
+    startDrag(win, e);
+  });
+
+  window.addEventListener('keydown', onBootKeydown);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target && e.target.id === 'guest-input') {
+      e.preventDefault();
+      signGuest();
+    }
+  });
+
+  const desktop = document.getElementById('desktop');
+  if (desktop) desktop.addEventListener('contextmenu', openCtxMenu);
+}
+
+function init() {
+  initListeners();
+  tick();
+  setInterval(tick, 1000);
+  renderTaskbar();
+  updateVisitorNo();
+  startBoot();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
