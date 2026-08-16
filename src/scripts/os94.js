@@ -16,6 +16,8 @@ let topZ = 30;
 let bootTimer = null;
 let bootCount = 0;
 const mq = window.matchMedia('(max-width: 759px)');
+// Mirrors the CSS guard on every looping animation, for the parts JS drives instead.
+const stillMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function getWin(id) {
   return document.getElementById('win-' + id);
@@ -224,17 +226,67 @@ function uptimeText(now) {
   return years + 'y ' + days + 'd';
 }
 
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
 function tick() {
   const now = new Date();
   let hours = now.getHours();
   const ampm = hours < 12 ? 'AM' : 'PM';
   hours = hours % 12 || 12;
   const minutes = String(now.getMinutes()).padStart(2, '0');
-  const clockEl = document.getElementById('clock');
-  if (clockEl) clockEl.textContent = hours + ':' + minutes + ' ' + ampm;
+  setText('clock', hours + ':' + minutes + ' ' + ampm);
+  setText('uptime', uptimeText(now));
+  netTick();
+}
 
-  const uptimeEl = document.getElementById('uptime');
-  if (uptimeEl) uptimeEl.textContent = uptimeText(now);
+// --- Network gauge --------------------------------------------------------
+
+// The cFosSpeed cosplay in the corner. There is no real traffic to measure, so the
+// numbers take a random walk from their server-rendered start: a fresh random each
+// second reads as noise, while a walk reads as a connection. Ceilings are the bar's
+// full scale, so --fill is just value/max. Under prefers-reduced-motion the whole
+// thing goes still and the server-rendered values stand — no ticker, no bar movement.
+const NET_UP_MAX = 400;
+const NET_DOWN_MAX = 140;
+let netUp = 240;
+let netDown = 75.9;
+let netPing = 49;
+let netConn = 60;
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function drift(value, max, jitter) {
+  return clamp(value + (Math.random() - 0.5) * max * jitter, max * 0.05, max);
+}
+
+// cFosSpeed keeps one decimal below 100 and drops it above — 75.9K, but 240K.
+function netFormat(value) {
+  return (value < 100 ? value.toFixed(1) : String(Math.round(value))) + 'K';
+}
+
+function setFill(id, value, max) {
+  const el = document.getElementById(id);
+  if (el) el.style.setProperty('--fill', Math.round((value / max) * 100) + '%');
+}
+
+function netTick() {
+  if (stillMq.matches) return;
+  netUp = drift(netUp, NET_UP_MAX, 0.3);
+  netDown = drift(netDown, NET_DOWN_MAX, 0.34);
+  netPing = clamp(netPing + Math.round((Math.random() - 0.5) * 15), 11, 120);
+  netConn = clamp(netConn + Math.round((Math.random() - 0.5) * 5), 41, 78);
+
+  setText('net-ping', netPing + 'ms');
+  setText('net-conn', String(netConn));
+  setText('net-up', netFormat(netUp));
+  setText('net-down', netFormat(netDown));
+  setFill('net-up-bar', netUp, NET_UP_MAX);
+  setFill('net-down-bar', netDown, NET_DOWN_MAX);
 }
 
 // --- Menus / wallpaper -----------------------------------------------------

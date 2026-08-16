@@ -1,0 +1,34 @@
+---
+interface Props {
+  ping?: string;
+  conn?: string;
+  up?: string;
+  down?: string;
+  upFill?: number;
+  downFill?: number;
+}
+
+const { ping = '49ms', conn = '60', up = '240K', down = '75.9K', upFill = 60, downFill = 54 } = Astro.props;
+---
+{/* cFosSpeed's desktop gauge, redrawn flat: latency and connection count on top, then an
+    upload bar and a download bar. Values are server-rendered so the widget reads correctly
+    with JS off — os94.js walks them from there. Bar length is the --fill custom property,
+    the same "geometry as a custom property" rule the windows and sticky notes follow. */}
+<div class="netgauge" title="traffic monitor">
+  <div class="netgauge-head">
+    <svg class="netgauge-glyph" viewBox="0 0 9 8" fill="none" aria-hidden="true"><polygon points="2,0 4,3 3,3 3,8 1,8 1,3 0,3" fill="#e8801f" /><polygon points="7,8 9,5 8,5 8,0 6,0 6,5 5,5" fill="#57c04a" /></svg>
+    <span class="netgauge-ping" id="net-ping">{ping}</span>
+    <svg class="netgauge-glyph netgauge-glyph--conn" viewBox="0 0 8 8" fill="none" aria-hidden="true"><rect x="0" y="0" width="3" height="3" fill="#6aa9f0" /><rect x="5" y="1" width="3" height="3" fill="#8ec2f7" /><rect x="2" y="5" width="3" height="3" fill="#4b8ad6" /></svg>
+    <span class="netgauge-conn" id="net-conn">{conn}</span>
+  </div>
+  <div class="netgauge-row">
+    <span class="netgauge-swatch netgauge-swatch--up"></span>
+    <span class="netgauge-track"><span class="netgauge-fill netgauge-fill--up" id="net-up-bar" style={`--fill: ${upFill}%`}></span></span>
+    <span class="netgauge-val" id="net-up">{up}</span>
+  </div>
+  <div class="netgauge-row">
+    <span class="netgauge-swatch netgauge-swatch--down"></span>
+    <span class="netgauge-track"><span class="netgauge-fill netgauge-fill--down" id="net-down-bar" style={`--fill: ${downFill}%`}></span></span>
+    <span class="netgauge-val" id="net-down">{down}</span>
+  </div>
+</div>

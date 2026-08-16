@@ -5,6 +5,7 @@ import StickyNote from '../components/os94/StickyNote.astro';
 import AppIcon from '../components/os94/AppIcon.astro';
 import StartItem from '../components/os94/StartItem.astro';
 import SysMon from '../components/os94/SysMon.astro';
+import NetGauge from '../components/os94/NetGauge.astro';
 import NetworkIcon from '../components/os94/NetworkIcon.astro';
 import BrandIcon from '../components/os94/BrandIcon.astro';
 import { DEFS, Z, APPS, appsById, START_ORDER } from '../data/os94.js';
@@ -21,7 +22,6 @@ const SYSMON_ROWS = [
   { label: 'LOC', value: 'BANGKOK, TH 🇹🇭' },
   { label: 'BUILD', value: '1994' },
   { label: 'UPTIME', id: 'uptime' },
-  { label: 'MEM', value: 'MOSTLY FINE' },
 ];
 ---
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
@@ -43,7 +43,7 @@ const SYSMON_ROWS = [
       <div class="desktop-readme">
         <h1 class="readme-title">HELLO, VISITOR</h1>
         <div class="readme-subtitle">SIRAWIT &ldquo;WIT&rdquo; MAHANIN · EST. 1994</div>
-        <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do. (just kidding)</p>
+        <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do.</p>
         <p>I take pictures and read books. I&rsquo;ve loved computers since my parents brought one home when I was nine.</p>
         <p>I played games on it, made friends on it, and looked at a few things I probably shouldn&rsquo;t have. I was completely hooked, so my dad started hiding the keyboard. Then the mouse. Then the cable. Then the Wi&#8209;Fi adapter, in the closet, which I found every single time. That&rsquo;s how I learned to drive Windows with whatever was left.</p>
         <p>Why mahanin.com? I wanted sirawit.com, but it was taken. It worked out &mdash; it means I get to write sirawit@mahanin.com.</p>
@@ -54,6 +54,8 @@ const SYSMON_ROWS = [
         <StickyNote right={26} bottom={330} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
         <SysMon rows={SYSMON_ROWS} />
+
+        <NetGauge />
       </div>
 
       <Window id="welcome" title="👋 welcome.exe" x={DEFS.welcome.x} y={DEFS.welcome.y} w={DEFS.welcome.w} h={DEFS.welcome.h} z={Z.welcome} bodyClass="win-body--pad-lg">
@@ -125,7 +127,7 @@ const SYSMON_ROWS = [
           <button type="button" class="bin-item" data-action="bin" data-note="Deleted 2021. Load-bearing walls, cost sheets, a hard hat. I loved computers from the first one I ever played on — I still have no idea how I ended up a civil engineer."><span class="bin-icon">📐</span><span class="bin-name">civil_engineering_career.dwg</span><span class="bin-meta">12.4 MB</span></button>
         </div>
         <div class="bin-bar">
-          <button type="button" class="btn-9x btn-9x--sm" data-action="bin" data-note="Emptied. They came back. They always come back.">EMPTY RECYCLE BIN</button>
+          <button type="button" class="btn-9x btn-9x--sm" data-action="bin" data-note="Emptied. They came back.">EMPTY RECYCLE BIN</button>
           <span class="bin-count">4 items</span>
         </div>
         <div class="bin-status" id="bin-status">Click a file. Nothing in here is recoverable, emotionally or otherwise.</div>
@@ -346,9 +348,32 @@ const SYSMON_ROWS = [
   }
   .winamp-btn--accent { color: #f2c14b; }
 
-  .sysmon { position: absolute; right: 20px; bottom: 16px; width: 196px; padding: 10px 12px 12px; background: rgba(6,42,38,.6); border: 1px solid rgba(255,255,255,.22); pointer-events: auto; }
+  /* SYSTEM MONITOR sits directly above the traffic gauge — same right edge, same width,
+     so the two read as one stacked column. bottom clears the gauge, not the taskbar. */
+  .sysmon { position: absolute; right: 20px; bottom: 96px; width: 196px; padding: 10px 12px 12px; background: rgba(6,42,38,.6); border: 1px solid rgba(255,255,255,.22); pointer-events: auto; }
   .sysmon-label { font: 400 9px/1.4 Silkscreen,monospace; color: #8fe3d6; letter-spacing: .5px; margin-bottom: 7px; }
   .sysmon-body { font: 400 10.5px/1.8 'IBM Plex Mono',monospace; color: #dff5f0; }
+
+  /* cFosSpeed cosplay. No title bar — the reference gadget has none. pointer-events: auto
+     is the .widgets opt-in (invariant 8); right-click still reaches the desktop menu,
+     since that handler matches on closest('.desktop') rather than on the event target. */
+  .netgauge { position: absolute; right: 20px; bottom: 16px; width: 196px; padding: 8px 10px 9px; background: rgba(6,42,38,.6); border: 1px solid rgba(255,255,255,.22); pointer-events: auto; }
+  .netgauge-head { display: flex; align-items: center; gap: 6px; }
+  .netgauge-glyph { width: 9px; height: 8px; flex: none; shape-rendering: crispEdges; }
+  .netgauge-glyph--conn { width: 8px; }
+  .netgauge-ping { flex: 1; font: 600 11px/1 'IBM Plex Mono',monospace; color: #dff5f0; }
+  .netgauge-conn { font: 600 11px/1 'IBM Plex Mono',monospace; color: #dff5f0; }
+  .netgauge-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+  .netgauge-swatch { width: 7px; height: 7px; flex: none; }
+  .netgauge-swatch--up { background: #e8801f; }
+  .netgauge-swatch--down { background: #57c04a; }
+  .netgauge-track { flex: 1; height: 11px; background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.16); }
+  /* Width is the only thing JS touches. The transition is safe without a reduced-motion
+     guard because netTick() stops writing --fill under reduce, so nothing ever moves. */
+  .netgauge-fill { display: block; height: 100%; width: var(--fill, 0%); transition: width .45s linear; }
+  .netgauge-fill--up { background: #e8801f; }
+  .netgauge-fill--down { background: #57c04a; }
+  .netgauge-val { width: 46px; text-align: right; font: 600 11px/1 'IBM Plex Mono',monospace; color: #dff5f0; }
 
   /* ---------- window chrome (Window.astro) ---------- */
   .win { display: none; position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h); z-index: var(--z); }
