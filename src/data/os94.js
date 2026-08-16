@@ -16,7 +16,7 @@ export const DEFS = {
   // taskman and netmon have no APPS entry either, but neither is parked: each has exactly
   // one bespoke opener elsewhere in the page — the taskbar's right-click menu for taskman,
   // the .netgauge widget for netmon. Delete that opener and the window is stranded.
-  taskman:  { x: 360, y: 190, w: 396, h: 236 },
+  taskman:  { x: 360, y: 190, w: 396, h: 240 },
   recycle:  { x: 300, y: 120, w: 428, h: 322 },
   // h is measured against the rendered content, not estimated: the copy ends with a button,
   // so the window bottom sits one body padding below it. Re-measure if the copy changes.
