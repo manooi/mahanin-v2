@@ -210,7 +210,7 @@ function tick() {
   if (uptimeEl) uptimeEl.textContent = Math.floor(days / 365) + 'y ' + (days % 365) + 'd';
 }
 
-// --- Menus / wallpaper / arrange ------------------------------------------
+// --- Menus / wallpaper -----------------------------------------------------
 
 function closeMenus() {
   const startMenu = document.getElementById('start-menu');
@@ -248,12 +248,6 @@ function cycleWall() {
   closeMenus();
 }
 
-function toggleArrange() {
-  const icons = document.getElementById('icons');
-  if (icons) icons.classList.toggle('one-col');
-  closeMenus();
-}
-
 // --- Dispatch / listeners ---------------------------------------------
 
 function dispatchAction(action, el) {
@@ -279,9 +273,6 @@ function dispatchAction(action, el) {
       break;
     case 'wall':
       cycleWall();
-      break;
-    case 'arrange':
-      toggleArrange();
       break;
     default:
       break;

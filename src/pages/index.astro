@@ -182,7 +182,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'projects', '
 
       <div id="ctx-menu" class="ctx-menu" data-menu="ctx">
         <button type="button" class="menu-item" data-action="wall">change wallpaper</button>
-        <button type="button" class="menu-item" data-action="arrange">arrange icons</button>
         <div class="menu-sep"></div>
         <button type="button" class="menu-item" data-app="readme">about this desktop</button>
       </div>
@@ -287,8 +286,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'projects', '
   .desktop { position: absolute; top: 0; left: 0; right: 0; bottom: 44px; overflow: hidden; }
 
   /* ---------- icons ---------- */
-  .icons { display: grid; position: absolute; top: 18px; left: 18px; grid-template-columns: repeat(2,88px); gap: 4px 6px; z-index: 2; }
-  .icons.one-col { grid-template-columns: repeat(1,88px); }
+  .icons { display: grid; position: absolute; top: 18px; left: 18px; grid-template-columns: repeat(1,88px); gap: 4px 6px; z-index: 2; }
   .icon {
     display: flex; flex-direction: column; align-items: center; gap: 5px;
     padding: 8px 4px 6px; cursor: pointer; border: 1px dotted transparent; border-radius: 2px;
