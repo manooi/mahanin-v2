@@ -74,6 +74,15 @@ function closeWin(id) {
   renderTaskbar();
 }
 
+// Highest --z among the windows actually on screen; null if the desktop is bare.
+function topOpenWindow() {
+  let top = null;
+  document.querySelectorAll('.win.is-open:not(.is-min)').forEach((win) => {
+    if (!top || readVar(win, '--z', 0) > readVar(top, '--z', 0)) top = win;
+  });
+  return top;
+}
+
 function isTopWindow(win) {
   const z = readVar(win, '--z', 0);
   let isTop = true;
@@ -231,8 +240,39 @@ function tick() {
 // --- Menus / wallpaper -----------------------------------------------------
 
 function closeMenus() {
-  const startMenu = document.getElementById('start-menu');
-  if (startMenu) startMenu.classList.remove('is-visible');
+  document.querySelectorAll('[data-menu].is-visible').forEach((menu) => menu.classList.remove('is-visible'));
+}
+
+function anyMenuOpen() {
+  return document.querySelector('[data-menu].is-visible') !== null;
+}
+
+// Right-click menus open at the cursor, clamped into the viewport — for the taskbar,
+// which sits at the bottom, that clamp is what flips the menu up above the pointer.
+function openContextMenu(id, e) {
+  const menu = document.getElementById(id);
+  if (!menu) return;
+  e.preventDefault();
+  closeMenus();
+  menu.classList.add('is-visible');
+  const x = Math.min(e.clientX, window.innerWidth - menu.offsetWidth - 6);
+  const y = Math.min(e.clientY, window.innerHeight - menu.offsetHeight - 6);
+  menu.style.left = Math.max(4, x) + 'px';
+  menu.style.top = Math.max(4, y) + 'px';
+}
+
+// Win95's desktop Refresh mostly just repainted the icons, which is exactly what this
+// does — a three-step opacity blink, no reload. Removing the class and forcing a reflow
+// before re-adding it is what lets the animation restart on a second Refresh.
+function refreshDesktop() {
+  closeMenus();
+  const icons = document.getElementById('icons');
+  if (icons) {
+    icons.classList.remove('is-refreshing');
+    void icons.offsetWidth;
+    icons.classList.add('is-refreshing');
+  }
+  renderTaskbar();
 }
 
 function toggleStart() {
@@ -267,7 +307,7 @@ function copyToClipboard(text, btn) {
   }
 }
 
-// --- Dispatch / listeners ---------------------------------------------
+// --- Dispatch / actions -----------------------------------------------
 
 function dispatchAction(action, el) {
   switch (action) {
@@ -284,6 +324,9 @@ function dispatchAction(action, el) {
     case 'start':
       toggleStart();
       break;
+    case 'refresh':
+      refreshDesktop();
+      break;
     case 'shutdown':
       shutdown();
       break;
@@ -297,6 +340,51 @@ function dispatchAction(action, el) {
       break;
   }
 }
+
+// --- Keyboard ------------------------------------------------------------
+
+// A tap of the Windows key (Meta, or Cmd on a Mac) toggles the start menu. It has to be
+// resolved on keyup: Meta fires a keydown ahead of every Cmd+C / Cmd+T too, so acting on
+// keydown would pop the menu open on any shortcut the user typed. Any other key pressed
+// while Meta is held cancels the tap. Ctrl+Esc is the real Win95 binding and works
+// everywhere, which matters because Windows itself swallows the Windows key.
+let metaTap = false;
+
+function onKeydown(e) {
+  const os = document.getElementById('os');
+  if (os && os.classList.contains('is-booting')) return;
+
+  metaTap = e.key === 'Meta' || e.key === 'OS';
+
+  if (e.key === 'Escape' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    toggleStart();
+    return;
+  }
+
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    // Menus first, so Escape backs out of what is on top rather than closing a window
+    // out from under an open menu.
+    if (anyMenuOpen()) {
+      closeMenus();
+      return;
+    }
+    const win = topOpenWindow();
+    if (win) closeWin(win.dataset.win);
+  }
+}
+
+function onKeyup(e) {
+  if ((e.key === 'Meta' || e.key === 'OS') && metaTap) {
+    metaTap = false;
+    const os = document.getElementById('os');
+    if (os && os.classList.contains('is-booting')) return;
+    toggleStart();
+  }
+}
+
+// --- Dispatch / listeners ---------------------------------------------
 
 function initListeners() {
   document.addEventListener('click', (e) => {
@@ -323,8 +411,7 @@ function initListeners() {
       }
       const inMenu = e.target.closest && e.target.closest('[data-menu]');
       if (inMenu) return;
-      const startMenu = document.getElementById('start-menu');
-      if (startMenu && startMenu.classList.contains('is-visible')) closeMenus();
+      if (anyMenuOpen()) closeMenus();
     },
     true
   );
@@ -342,7 +429,20 @@ function initListeners() {
     startDrag(win, e);
   });
 
+  document.addEventListener('contextmenu', (e) => {
+    if (!e.target.closest) return;
+    // Inside a window the browser's own menu wins — that is where the copyable text is.
+    if (e.target.closest('.win')) return;
+    if (e.target.closest('.taskbar')) {
+      openContextMenu('taskbar-menu', e);
+    } else if (e.target.closest('.desktop') || e.target.closest('.wallpaper')) {
+      openContextMenu('desktop-menu', e);
+    }
+  });
+
   window.addEventListener('keydown', onBootKeydown);
+  window.addEventListener('keydown', onKeydown);
+  window.addEventListener('keyup', onKeyup);
 }
 
 function init() {

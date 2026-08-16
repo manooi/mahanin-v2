@@ -6,6 +6,7 @@ import AppIcon from '../components/os94/AppIcon.astro';
 import StartItem from '../components/os94/StartItem.astro';
 import SysMon from '../components/os94/SysMon.astro';
 import NetworkIcon from '../components/os94/NetworkIcon.astro';
+import BrandIcon from '../components/os94/BrandIcon.astro';
 import { DEFS, Z, APPS, appsById, START_ORDER } from '../data/os94.js';
 
 const title = 'Sirawit Mahanin';
@@ -105,12 +106,19 @@ const SYSMON_ROWS = [
         <p>Work, photos, book recommendations. All welcome.</p>
         <div class="contact-rows">
           <div class="row-group">
-            <a href="mailto:sirawit@mahanin.com" class="row">📧 <span class="row-label">email me</span><span class="row-badge">sirawit@mahanin.com</span></a>
+            <a href="mailto:sirawit@mahanin.com" class="row">📧 <span class="row-label row-email">sirawit@mahanin.com</span></a>
             <button type="button" class="copy-btn" data-action="copy" data-copy-text="sirawit@mahanin.com" data-idle-label="📋" aria-label="Copy email address">📋</button>
           </div>
-          <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/" target="_blank" rel="noopener noreferrer" class="row">💼 <span class="row-label">LinkedIn</span></a>
-          <a href="https://github.com/manooi" target="_blank" rel="noopener noreferrer" class="row">🛠️ <span class="row-label">GitHub</span></a>
+          <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/" target="_blank" rel="noopener noreferrer" class="row"><BrandIcon name="linkedin" /><span class="row-label">LinkedIn</span></a>
+          <a href="https://github.com/manooi" target="_blank" rel="noopener noreferrer" class="row"><BrandIcon name="github" /><span class="row-label">GitHub</span></a>
         </div>
+      </Window>
+
+      <Window id="taskman" title="⚙️ taskman.exe" x={DEFS.taskman.x} y={DEFS.taskman.y} w={DEFS.taskman.w} h={DEFS.taskman.h} z={Z.taskman}>
+        <div class="sec-label">TASK MANAGER</div>
+        <p>You right&#8209;clicked the taskbar. Genuine respect for that.</p>
+        <p>But be honest &mdash; did you really expect me to build a working task manager? The illusion goes exactly this deep.</p>
+        <button type="button" class="btn-9x" data-action="close">FAIR ENOUGH</button>
       </Window>
 
       <Window id="winamp" title="🎵 winamp" x={DEFS.winamp.x} y={DEFS.winamp.y} w={DEFS.winamp.w} h={DEFS.winamp.h} z={Z.winamp} bodyClass="win-body--flush">
@@ -141,6 +149,17 @@ const SYSMON_ROWS = [
         ))}
         <button type="button" class="start-item start-item--danger" data-action="shutdown"><span class="start-item-icon">⏻</span>shut down...</button>
       </div>
+    </div>
+
+    <!-- Right-click menus, positioned at the cursor by JS. data-menu keeps the
+         outside-click handler from closing them on their own mousedown. The taskbar
+         one is the only opener taskman.exe has. -->
+    <div id="desktop-menu" class="ctx-menu" data-menu="desktop">
+      <button type="button" class="menu-item" data-action="refresh">Refresh</button>
+    </div>
+
+    <div id="taskbar-menu" class="ctx-menu" data-menu="taskbar">
+      <button type="button" class="menu-item" data-app="taskman">Task Manager</button>
     </div>
 
     <div class="taskbar">
@@ -210,6 +229,8 @@ const SYSMON_ROWS = [
   @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   @keyframes eq { 0%, 100% { height: 20%; } 50% { height: 100%; } }
   @keyframes doodle-nudge { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(4px,3px); } }
+  /* steps() keeps the desktop Refresh blink chunky rather than a smooth fade. */
+  @keyframes icons-repaint { from { opacity: 0; } to { opacity: 1; } }
   .blink-cursor { animation: blink 1.1s steps(1) infinite; }
 
   /* ---------- root / wallpaper / desktop ---------- */
@@ -226,6 +247,7 @@ const SYSMON_ROWS = [
 
   /* ---------- icons ---------- */
   .icons { display: grid; position: absolute; top: 18px; left: 18px; grid-template-columns: repeat(1,88px); gap: 4px 6px; z-index: 2; }
+  .icons.is-refreshing { animation: icons-repaint .22s steps(3); }
   .icon {
     position: relative;
     display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -354,7 +376,10 @@ const SYSMON_ROWS = [
   }
   .row:hover { background: #f2c14b; color: #2a2620; }
   .row-label { flex: 1; }
+  .row-email { font-weight: 600; letter-spacing: .2px; }
   .row-badge { font: 400 8.5px Silkscreen,monospace; color: #8a3b12; }
+  /* Brand marks sit where an emoji used to; flex: none keeps them off the label's flex: 1. */
+  .row-logo { width: 17px; height: 17px; flex: none; display: block; }
 
   .row-group { display: flex; gap: 6px; }
   .row-group .row { flex: 1; min-width: 0; }
@@ -409,6 +434,13 @@ const SYSMON_ROWS = [
   .menu-item { width: 100%; text-align: left; background: none; border: none; padding: 8px 14px 8px 12px; font: 400 10px Silkscreen,monospace; color: #2a2620; cursor: pointer; white-space: nowrap; touch-action: manipulation; }
   .menu-item:hover { background: #3a3450; color: #fff; }
   .menu-sep { height: 2px; margin: 3px 4px; background: #8a8275; box-shadow: 0 1px 0 #fffdf7; }
+  /* Above the taskbar (8000) and the start menu (8500); left/top come from JS. */
+  .ctx-menu {
+    position: absolute; display: none; z-index: 8600; padding: 3px; min-width: 148px;
+    background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7;
+    box-shadow: 4px 4px 0 rgba(0,0,0,.4);
+  }
+  .ctx-menu.is-visible { display: block; }
   .start-menu .menu-sep { margin: 4px 6px; }
 
   .start-menu { position: absolute; left: 8px; bottom: 46px; width: 236px; max-height: calc(100% - 60px); overflow: auto; display: none; background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7; box-shadow: 4px 4px 0 rgba(0,0,0,.4); z-index: 8500; }
