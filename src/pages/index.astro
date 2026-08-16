@@ -55,9 +55,9 @@ const SYSMON_ROWS = [
       <div class="widgets">
         <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={-2.5} />
 
-        <GhostIcon glyph="🐸" label="camflock" top={218} right={48} />
+        <GhostIcon glyph="🐸" label="camflock" top={194} right={48} />
 
-        <StickyNote right={26} bottom={330} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
+        <StickyNote right={26} bottom={226} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
         <SysMon rows={SYSMON_ROWS} />
 
@@ -622,6 +622,14 @@ const SYSMON_ROWS = [
      top of the next icon over — so it stays hidden there too. */
   @media (max-width: 999px) {
     .icon-doodle { display: none; }
+  }
+
+  /* The right column carries two stacks that grow toward each other: the photo and
+     camflock hang off the top, the sticky note / SYSMON / gauge off the bottom. They meet
+     at roughly 610px of desktop height, so below that the decorative top stack drops out
+     rather than landing on the note — the same call as the doodle above, by height. */
+  @media (max-height: 660px) {
+    .desk-photo, .ghost-icon { display: none; }
   }
 
   @media (max-width: 759px) {
