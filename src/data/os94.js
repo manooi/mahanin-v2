@@ -25,16 +25,17 @@ export const Z = { char: 13, projects: 15, contact: 20, winamp: 21, welcome: 25 
 // desktop stays put behind it). Takes the whole app, not just the href.
 export const linkAttrs = (app) => ((app.newTab ?? app.href.startsWith('http')) ? { target: '_blank', rel: 'noopener noreferrer' } : {});
 
-// Apps drive the icon grid, mobile menu, and start menu. An entry with `href` renders
-// as a link (no window) instead of a `data-app` opener.
+// Apps drive the icon grid and the start menu. An entry with `href` renders as a link
+// (no window) instead of a `data-app` opener. The icon grid is the only app surface at
+// both breakpoints — mobile reflows the same grid rather than swapping in a list.
 // `doodle` adds the hand-drawn arrow + scrawl next to the desktop icon — the only
-// onboarding cue now that no window opens at startup. Icon grid only (mobile menu
-// and start menu ignore it); hidden under 1000px, where it would hit .desktop-readme.
+// onboarding cue now that no window opens at startup. Icon grid only (the start menu
+// ignores it); hidden under 1000px, where it would hit .desktop-readme.
 export const APPS = [
-  { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)', href: '/resume/', newTab: true, doodle: 'HR start here' },
-  { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
-  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
-  { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             mobileLabel: 'say hi',            startLabel: 'say hi' },
+  { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], startLabel: 'resume (for HR)', href: '/resume/', newTab: true, doodle: 'HR start here' },
+  { id: 'photo',    icon: '📷', gridLines: ['photos'],             startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
+  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
+  { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             startLabel: 'say hi' },
 ];
 
 export const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));

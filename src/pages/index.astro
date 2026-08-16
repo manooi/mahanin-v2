@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Window from '../components/os94/Window.astro';
 import StickyNote from '../components/os94/StickyNote.astro';
 import AppIcon from '../components/os94/AppIcon.astro';
-import AppRow from '../components/os94/AppRow.astro';
 import StartItem from '../components/os94/StartItem.astro';
 import SysMon from '../components/os94/SysMon.astro';
 import NetworkIcon from '../components/os94/NetworkIcon.astro';
@@ -38,16 +37,6 @@ const SYSMON_ROWS = [
     <div id="desktop" class="desktop">
       <div id="icons" class="icons">
         {APPS.map((app) => <AppIcon app={app} />)}
-      </div>
-
-      <div class="mobile-menu">
-        <div class="mobile-menu-head">
-          <div class="mobile-menu-title">SIRAWIT MAHANIN</div>
-          <div class="mobile-menu-sub">DEVELOPER · BANGKOK · EST. 1994</div>
-        </div>
-        <div class="mobile-menu-rows">
-          {APPS.filter((app) => app.mobileLabel).map((app) => <AppRow app={app} />)}
-        </div>
       </div>
 
       <div class="desktop-readme">
@@ -264,22 +253,6 @@ const SYSMON_ROWS = [
     .icon-doodle { animation: doodle-nudge 2.6s ease-in-out infinite; }
   }
 
-  /* ---------- mobile menu ---------- */
-  .mobile-menu { display: none; position: absolute; inset: 0; overflow: auto; background: rgba(6,30,28,.55); z-index: 2; }
-  .mobile-menu-head { padding: 14px 16px 10px; background: #3a3450; border-bottom: 2px solid #1a1626; }
-  .mobile-menu-title { font: 400 15px/1.3 Silkscreen,monospace; color: #fff; }
-  .mobile-menu-sub { font: 400 9px/1.5 Silkscreen,monospace; color: #b9aee8; margin-top: 5px; }
-  .mobile-menu-rows { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-  .m-row {
-    display: flex; gap: 11px; align-items: center; width: 100%; text-align: left;
-    background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7;
-    padding: 11px 12px; cursor: pointer; font: inherit; color: inherit; text-decoration: none;
-    touch-action: manipulation;
-  }
-  .m-row-icon { font-size: 19px; }
-  .m-row-label { flex: 1; font: 400 10px Silkscreen,monospace; color: #2a2620; }
-  .m-row-arrow { color: #8a3b12; }
-
   /* ---------- readme-on-desktop ----------
      Single source in the DOM for both breakpoints (see mobile section below):
      desktop centers it absolutely between the icon column and the widgets;
@@ -493,18 +466,29 @@ const SYSMON_ROWS = [
   /* ---------- mobile ---------- */
   /* Below ~1000px the readme block hugs its 140px left bound and the doodle would
      collide with it (doodle right edge ≈ 195px in). Raise this if the scrawl gets
-     longer. Icons themselves vanish under 760px, taking the doodle too. */
+     longer. Under 760px the grid goes multi-column, where a doodle would land on
+     top of the next icon over — so it stays hidden there too. */
   @media (max-width: 999px) {
     .icon-doodle { display: none; }
   }
 
   @media (max-width: 759px) {
-    .icons, .widgets, .tray { display: none; }
-    /* .mobile-menu no longer covers the whole desktop: it flows in normal
-       document order above .desktop-readme, and .desktop scrolls to reach both —
-       this is what keeps the bio reachable on mobile without a second copy of it. */
+    .widgets, .tray { display: none; }
+    /* Same icon grid as the desktop, just unpinned: it drops out of its absolute
+       corner into normal document order, spreads to fill the width, and .desktop
+       scrolls so the bio flows in underneath. One DOM, two breakpoints — there is
+       no separate mobile list any more. */
     .desktop { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .mobile-menu { display: block; position: static; inset: auto; overflow: visible; }
+    .icons {
+      position: static; z-index: auto;
+      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+      gap: 6px 4px; padding: 16px 10px 6px;
+    }
+    /* Roomier hit areas than the 88px desktop cell: ~74px tall, comfortably past
+       the 44px touch-target floor. */
+    .icon { padding: 12px 4px 10px; }
+    .icon-glyph { font-size: 33px; }
+    .icon-label { font-size: 10px; }
     .desktop-readme {
       position: static; z-index: auto;
       top: auto; left: auto; right: auto; transform: none;
