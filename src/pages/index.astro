@@ -651,10 +651,20 @@ const SYSMON_ROWS = [
        scrolls so the bio flows in underneath. One DOM, two breakpoints — there is
        no separate mobile list any more. */
     .desktop { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    /* One row that scrolls sideways, rather than wrapping to a second: about four icons
+       fit across a phone, so five apps left a single stranded icon on its own line. Fixed
+       84px columns instead of 1fr is what makes the overflow legible — 1fr would divide the
+       width so the last visible icon ends flush with the edge and the row would look
+       finished. At 84px the next icon is cut mid-glyph, which reads as "keep going".
+       overscroll-behavior stops a sideways swipe turning into browser back-navigation.
+       No scroll snapping: five icons come to 436px, so on a large phone the row scrolls
+       barely 16px, and a snap point every 88px would drag that short scroll back to the
+       start and put the last icon out of reach. */
     .icons {
       position: static; z-index: auto;
-      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-      gap: 6px 4px; padding: 16px 10px 6px;
+      grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 84px;
+      gap: 0 4px; padding: 16px 10px 6px;
+      overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
     }
     /* Roomier hit areas than the 88px desktop cell: ~74px tall, comfortably past
        the 44px touch-target floor. */
