@@ -7,7 +7,7 @@ const BOOT = [
   'LOADING PERSONALITY .... OK',
   'MOUNTING /photos ....... OK',
   'MOUNTING /books ........ 1 IN PROGRESS',
-  'MAPLESTORY.EXE ......... FOUND',
+  'COFFEE.SYS ............. FOUND',
   'RESUME.DOC ............. TIDY, FOR HR',
   'READY.'
 ];

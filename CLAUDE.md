@@ -16,10 +16,10 @@ There are no test or lint commands — this is a static site.
 
 Personal site at [mahanin.com](https://mahanin.com), built with Astro (static output). Two pages:
 
-- `src/pages/index.astro` — the hub, styled as "Mahanin OS 94": a retro desktop with a skippable boot screen, 7 draggable windows (welcome, readme, character sheet, projects, bookshelf, contact, winamp player), taskbar with start menu, right-click context menu (wallpaper cycle, icon arrange), and a shutdown screen. `welcome.exe` is the Mint-style first-visit panel and the only window open at startup: no-JS resume fast-path plus quick links; its "show at startup" checkbox persists as `localStorage['os94-welcome']`. Mobile (<760px) swaps the icon grid for a list menu and makes windows full-screen.
+- `src/pages/index.astro` — the hub, styled as "Mahanin OS 94": a retro desktop with a skippable boot screen, 5 reachable draggable windows (welcome, readme, projects, contact, winamp player) plus a parked `char` window (rendered but unreachable — no `APPS` entry; restore it by re-adding one), taskbar with start menu, right-click context menu (wallpaper cycle, icon arrange), and a shutdown screen. `welcome.exe` is the Mint-style first-visit panel and the only window open at startup: no-JS resume fast-path plus quick links; its "show at startup" checkbox persists as `localStorage['os94-welcome']`. Mobile (<760px) swaps the icon grid for a list menu and makes windows full-screen.
 - `src/pages/resume/index.astro` — the resume, printable to PDF via the "Save as PDF" button
 - `src/layouts/Base.astro` — shared head/meta shell; pages pass title/description/canonical/og props; a named `head` slot lets pages inject extras (the hub uses it for font preloads)
-- `src/components/os94/Window.astro` — the window chrome (title bar, min/close buttons, body variants) used 7× by the hub; geometry arrives as CSS custom properties (`--x/--y/--w/--h/--z`)
+- `src/components/os94/Window.astro` — the window chrome (title bar, min/close buttons, body variants) used 6× by the hub; geometry arrives as CSS custom properties (`--x/--y/--w/--h/--z`)
 - `src/scripts/os94.js` — all hub behavior, vanilla JS, bundled by Astro as one deferred module
 - `public/fonts/` — self-hosted latin-subset woff2 (Silkscreen 400, IBM Plex Mono 400/600); no Google Fonts requests
 
@@ -34,9 +34,9 @@ Personal site at [mahanin.com](https://mahanin.com), built with Astro (static ou
 **OS94 hub invariants (expensive to relearn — don't break):**
 1. All OS94 CSS lives in the page's `<style is:global>` block. Astro scoped styles are stamped only onto statically rendered elements, so JS-created DOM (taskbar buttons, boot lines) would silently miss scoped rules.
 2. The initial HTML must be valid without JS: `#os` ships with `is-booting`, the welcome window ships `is-open` (it is the only one that does), the matching welcome taskbar button is server-rendered, and a `<noscript>` style skips the boot screen. The server-rendered taskbar buttons must match exactly what `renderTaskbar()` derives from `.win.is-open`, or the taskbar flickers on load. Never "fix" a flash by moving initial state into JS.
-3. The `<noscript>` link list in the welcome window (resume / Unsplash / GitHub / email / LinkedIn) must survive edits — it is the only navigation JS-off visitors get, since the `data-app` rows do nothing without JS.
+3. The `<noscript>` link list in the welcome window (resume / Unsplash / GitHub / Goodreads / email / LinkedIn) must survive edits — it is the only navigation JS-off visitors get, since the `data-app` rows do nothing without JS.
 4. Window geometry lives exactly once, as custom-property props on each `<Window>` in `index.astro`. JS reads/writes the same properties — never duplicate the coordinates table into `os94.js`.
-5. The `APPS` array is the single source for the icon grid, mobile menu, and start menu. An entry with an `href` renders as an `<a>` carrying no `data-app` — external hrefs (photos → Unsplash) also get `target="_blank" rel="noopener noreferrer"`, internal ones (resume → `/resume/`) stay same-tab. Entries without `href` open the window matching their `id`.
+5. The `APPS` array is the single source for the icon grid, mobile menu, and start menu. An entry with an `href` renders as an `<a>` carrying no `data-app` — external hrefs (photos → Unsplash, bookshelf → Goodreads) also get `target="_blank" rel="noopener noreferrer"` via `linkAttrs()`, internal ones (resume → `/resume/`) stay same-tab. Entries without `href` open the window matching their `id`.
 6. Keep multi-line inline elements (`<a>`, `<strong>`, `<span>`) on one line in `.astro` markup — Astro collapses surrounding whitespace (known repo gotcha).
 
 ## Hosting

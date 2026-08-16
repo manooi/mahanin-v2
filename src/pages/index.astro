@@ -11,16 +11,17 @@ const ogDescription = 'Consultant Developer at Thoughtworks, Bangkok. Resume, ph
 // Window geometry — single source of truth (design's DEFS table). Never duplicate into JS.
 const DEFS = {
   welcome:  { x: 430, y: 80,  w: 450, h: 428 },
-  readme:   { x: 236, y: 44,  w: 460, h: 396 },
+  readme:   { x: 236, y: 44,  w: 460, h: 353 },
+  // char is parked: no APPS entry, so it has no opener anywhere (icon grid/mobile/start/ctx menu).
+  // Still rendered + closed in the DOM; restorable by re-adding a `char` entry to APPS below.
   char:     { x: 392, y: 110, w: 458, h: 452 },
   projects: { x: 352, y: 150, w: 452, h: 356 },
-  books:    { x: 288, y: 96,  w: 424, h: 420 },
-  contact:  { x: 420, y: 138, w: 408, h: 348 },
+  contact:  { x: 420, y: 138, w: 408, h: 243 },
   winamp:   { x: 520, y: 430, w: 276, h: 168 },
 };
-// welcome opens above the other 6 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
-// Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume removed); winamp is new, one above the old highest static z. Gaps are harmless.
-const Z = { readme: 10, char: 13, projects: 15, books: 16, contact: 20, winamp: 21, welcome: 25 };
+// welcome opens above the other 5 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
+// Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume/books removed); winamp is new, one above the old highest static z. Gaps are harmless.
+const Z = { readme: 10, char: 13, projects: 15, contact: 20, winamp: 21, welcome: 25 };
 
 // Apps drive the icon grid, mobile menu, and start menu. An entry with `href` renders
 // as a link (no window) instead of a `data-app` opener. External hrefs (http…) get
@@ -30,16 +31,15 @@ const APPS = [
   { id: 'welcome',  icon: '👋', gridLines: ['welcome'],           mobileLabel: 'welcome',           startLabel: 'welcome' },
   { id: 'readme',   icon: '📝', gridLines: ['readme.txt'],        mobileLabel: 'readme.txt',        startLabel: 'readme.txt' },
   { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)', href: '/resume/' },
-  { id: 'char',     icon: '🍁', gridLines: ['character'],          mobileLabel: 'character',         startLabel: 'character' },
   { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
   { id: 'projects', icon: '🛠️', gridLines: ['projects'],           mobileLabel: 'projects',          startLabel: 'projects' },
-  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf' },
+  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             mobileLabel: 'say hi',            startLabel: 'say hi' },
   { id: 'winamp',   icon: '🎵', gridLines: ['winamp'],             mobileLabel: 'winamp',            startLabel: 'winamp' },
 ];
 const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
 // Start menu mirrors APPS order; null entries are separators before shutdown.
-const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'projects', 'books', 'contact', 'winamp', null];
+const START_ORDER = ['welcome', 'readme', 'resume', null, 'photo', 'projects', 'books', 'contact', 'winamp', null];
 ---
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
   <Fragment slot="head">
@@ -100,7 +100,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
           <button type="button" class="row" data-app="projects">🛠️ <span class="row-label">projects</span></button>
           <button type="button" class="row" data-app="contact">✉️ <span class="row-label">say hi</span></button>
         </div>
-        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@souperwit">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
+        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@souperwit">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="https://www.goodreads.com/user/show/177765370-sirawit-mahanin">Goodreads</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
         <label class="welcome-startup"><input type="checkbox" id="welcome-startup" checked> show this window at startup</label>
       </Window>
 
@@ -108,7 +108,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         <h1 class="readme-title">HELLO, VISITOR</h1>
         <div class="readme-subtitle">SIRAWIT &ldquo;WIT&rdquo; MAHANIN · EST. 1994</div>
         <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do.</p>
-        <p>I take pictures, read books, and keep a MapleStory character alive out of loyalty. This is my desktop. Poke around &mdash; drag windows, right&#8209;click the wallpaper, nothing here can break. I already tried.</p>
+        <p>I take pictures and read books. This is my desktop &mdash; poke around, nothing here can break. I already tried.</p>
         <p>Why mahanin.com? I wanted sirawit.com, but it was taken. And no, I&rsquo;m not the only Mahanin.</p>
         <div class="card readme-tip">
           <span class="tip-arrow">&gt;</span> tip: the <strong>resume</strong> folder is the polite one.<br>
@@ -152,30 +152,13 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         <a href="https://github.com/manooi" class="btn-9x">GITHUB @manooi →</a>
       </Window>
 
-      <Window id="books" title="📚 bookshelf" x={DEFS.books.x} y={DEFS.books.y} w={DEFS.books.w} h={DEFS.books.h} z={Z.books}>
-        <div class="sec-label">NOW READING</div>
-        <div class="card book-now">
-          <div class="book-now-spine"></div>
-          <div class="book-now-info"><strong>[ book title ]</strong><br><span class="book-now-meta">page 47 of 380 · going strong, allegedly</span></div>
-        </div>
-        <div class="sec-label">SHELVES</div>
-        <div class="book-shelves">
-          <div class="book-shelf-row"><span>finished, loved it</span><span class="book-shelf-count">00</span></div>
-          <div class="book-shelf-row"><span>finished, no comment</span><span class="book-shelf-count">00</span></div>
-          <div class="book-shelf-row"><span>abandoned at page 40</span><span class="book-shelf-count">00</span></div>
-          <div class="book-shelf-row"><span>bought, still shrink&#8209;wrapped</span><span class="book-shelf-count">00</span></div>
-        </div>
-        <p class="book-note">Send me the counts and titles and I&rsquo;ll fill this shelf properly.</p>
-      </Window>
-
       <Window id="contact" title="✉️ say hi" x={DEFS.contact.x} y={DEFS.contact.y} w={DEFS.contact.w} h={DEFS.contact.h} z={Z.contact}>
-        <p>Work, photos, book recommendations, or which class to main next. All welcome.</p>
+        <p>Work, photos, book recommendations. All welcome.</p>
         <div class="contact-rows">
-          <a href="mailto:sirawit@mahanin.com" class="row">📧 <span class="row-label">email me</span><span class="row-badge">FASTEST</span></a>
-          <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/" class="row">💼 <span class="row-label">LinkedIn</span><span class="row-badge">POLITE</span></a>
-          <a href="https://github.com/manooi" class="row">🛠️ <span class="row-label">GitHub</span><span class="row-badge">HONEST</span></a>
+          <a href="mailto:sirawit@mahanin.com" class="row">📧 <span class="row-label">email me</span></a>
+          <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/" class="row">💼 <span class="row-label">LinkedIn</span></a>
+          <a href="https://github.com/manooi" class="row">🛠️ <span class="row-label">GitHub</span></a>
         </div>
-        <p class="contact-note">Replies usually within a day, unless MapleStory has an event.</p>
       </Window>
 
       <Window id="winamp" title="🎵 winamp" x={DEFS.winamp.x} y={DEFS.winamp.y} w={DEFS.winamp.w} h={DEFS.winamp.h} z={Z.winamp} bodyClass="win-body--flush">
@@ -184,7 +167,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
           <span class="winamp-head-kbps">KBPS 128</span>
         </div>
         <div class="winamp-body">
-          <div class="winamp-track"><span class="winamp-track-text">[ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; [ your track here ] — [ artist ] &nbsp;·&nbsp; henesys field theme &nbsp;·&nbsp; </span></div>
+          <div class="winamp-track"><span class="winamp-track-text">[ your track here ] — [ artist ] &nbsp;·&nbsp; [ something on repeat ] &nbsp;·&nbsp; [ your track here ] — [ artist ] &nbsp;·&nbsp; [ something on repeat ] &nbsp;·&nbsp; </span></div>
           <div class="winamp-eq">
             <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
           </div>
@@ -201,7 +184,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         <button type="button" class="menu-item" data-action="wall">change wallpaper</button>
         <button type="button" class="menu-item" data-action="arrange">arrange icons</button>
         <div class="menu-sep"></div>
-        <button type="button" class="menu-item" data-app="char">character info</button>
         <button type="button" class="menu-item" data-app="readme">about this desktop</button>
       </div>
     </div>
@@ -310,7 +292,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .icon {
     display: flex; flex-direction: column; align-items: center; gap: 5px;
     padding: 8px 4px 6px; cursor: pointer; border: 1px dotted transparent; border-radius: 2px;
-    background: transparent; font: inherit; color: inherit;
+    background: transparent; font: inherit; color: inherit; text-decoration: none;
   }
   .icon:hover { background: rgba(255,255,255,.14); border: 1px dotted rgba(255,255,255,.55); }
   .icon-glyph { font-size: 29px; line-height: 1; filter: drop-shadow(2px 2px 0 rgba(0,0,0,.35)); }
@@ -325,7 +307,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .m-row {
     display: flex; gap: 11px; align-items: center; width: 100%; text-align: left;
     background: #d8d2c4; border: 2px solid; border-color: #fffdf7 #4a453c #4a453c #fffdf7;
-    padding: 11px 12px; cursor: pointer; font: inherit; color: inherit;
+    padding: 11px 12px; cursor: pointer; font: inherit; color: inherit; text-decoration: none;
   }
   .m-row-icon { font-size: 19px; }
   .m-row-label { flex: 1; font: 400 10px Silkscreen,monospace; color: #2a2620; }
@@ -452,18 +434,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .project-num { font: 400 9px Silkscreen,monospace; color: #8a3b12; }
   .project-desc-sub { color: #6b6459; }
 
-  .book-now { display: flex; gap: 10px; align-items: stretch; padding: 9px 10px; margin-bottom: 14px; }
-  .book-now-spine { width: 34px; background: repeating-linear-gradient(135deg,#cfc7b6 0 5px,#e3dccd 5px 10px); border: 1px solid #8a8275; }
-  .book-now-info { flex: 1; }
-  .book-now-meta { color: #6b6459; font-size: 11.5px; }
-  .book-shelves { display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; }
-  .book-shelf-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #b3aa98; padding-bottom: 4px; }
-  .book-shelf-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .book-shelf-count { color: #6b6459; }
-  .book-note { margin: 14px 0 0; font-size: 11.5px; color: #6b6459; }
-
   .contact-rows { display: flex; flex-direction: column; gap: 6px; }
-  .contact-note { margin: 12px 0 0; font-size: 11.5px; color: #6b6459; }
 
   /* ---------- menus ---------- */
   .menu-item { width: 100%; text-align: left; background: none; border: none; padding: 8px 14px 8px 12px; font: 400 10px Silkscreen,monospace; color: #2a2620; cursor: pointer; white-space: nowrap; }
@@ -479,7 +450,7 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .start-spine { width: 32px; background: linear-gradient(180deg,#5b5180,#3a3450); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px; }
   .start-spine-label { font: 400 11px Silkscreen,monospace; color: #fff; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 1px; }
   .start-items { flex: 1; padding: 6px; }
-  .start-item { width: 100%; text-align: left; display: flex; gap: 10px; align-items: center; background: none; border: none; padding: 8px 12px 8px 9px; font: 400 10px Silkscreen,monospace; color: #2a2620; cursor: pointer; }
+  .start-item { width: 100%; text-align: left; display: flex; gap: 10px; align-items: center; background: none; border: none; padding: 8px 12px 8px 9px; font: 400 10px Silkscreen,monospace; color: #2a2620; cursor: pointer; text-decoration: none; }
   .start-item:hover { background: #3a3450; color: #fff; }
   .start-item-icon { font-size: 16px; }
   .start-item--danger { color: #8a3b12; }
