@@ -18,7 +18,7 @@ export const DEFS = {
   // the .netgauge widget for netmon. Delete that opener and the window is stranded.
   taskman:  { x: 360, y: 190, w: 396, h: 236 },
   recycle:  { x: 300, y: 120, w: 428, h: 322 },
-  netmon:   { x: 330, y: 150, w: 424, h: 306 },
+  netmon:   { x: 330, y: 150, w: 424, h: 246 },
 };
 
 // Static z only orders the parked windows against each other; nothing opens on load. Runtime topZ starts at 30 so every focus still wins.
