@@ -53,14 +53,15 @@ const SYSMON_ROWS = [
       </div>
 
       <div class="widgets">
-        {/* camflock comes first so the photo, later in the DOM, paints over it — the icon
-            is tucked under the photo's bottom edge like something the photo was dropped on
-            top of. Drag the photo away and the whole frog is there. */}
-        <GhostIcon glyph="🐸" label="camflock" top={160} right={48} />
+        {/* camflock comes first so the photo, later in the DOM, paints over it. It now sits
+            *entirely* under the photo, label and all — nothing shows until you drag the
+            photo off it, which is the joke. The margin is about 2px at the bottom, so
+            nudging either one down, or swapping the glyph for a taller emoji, uncovers it. */}
+        <GhostIcon glyph="🐸" label="camflock" top={120} right={50} />
 
-        <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={-2.5} />
+        <DeskPhoto src="/assets/profile-note.webp" alt="Sirawit Mahanin" width={240} height={304} w={132} top={18} right={20} rotate={0} />
 
-        <StickyNote right={26} bottom={226} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
+        <StickyNote right={40} top={250} sign="— me">currently open to work &mdash; and to good book recommendations.</StickyNote>
 
         <SysMon rows={SYSMON_ROWS} />
 
@@ -153,7 +154,7 @@ const SYSMON_ROWS = [
         <div class="sec-label">TRAFFIC MONITOR</div>
         <p>You knew this program.</p>
         <p>I installed cFosSpeed on every computer I owned, certain that watching the traffic would make it faster. It never did. I kept it running anyway.</p>
-        <button type="button" class="btn-9x" data-action="close">STILL FASTER</button>
+        <button type="button" class="btn-9x btn-9x--gap" data-action="close">STILL FASTER</button>
       </Window>
 
       <Window id="winamp" title="🎵 winamp" x={DEFS.winamp.x} y={DEFS.winamp.y} w={DEFS.winamp.w} h={DEFS.winamp.h} z={Z.winamp} bodyClass="win-body--flush">
@@ -460,6 +461,9 @@ const SYSMON_ROWS = [
   .btn-9x:hover { background: #3a3450; color: #fff; border-color: #8a8275 #1a1626 #1a1626 #8a8275; }
   .btn-9x--sm { padding: 6px 10px; font-size: 9.5px; }
   .btn-9x--power { margin-top: 22px; padding: 10px 16px; }
+  /* A button sitting straight under a paragraph only inherits that paragraph's 10px
+     bottom margin, which reads as cramped. This is the breathing room for that case. */
+  .btn-9x--gap { margin-top: 12px; }
   .btn-9x--power:hover { background: #e07a3f; color: #fff; border-color: #fffdf7 #4a453c #4a453c #fffdf7; }
 
   .row {
