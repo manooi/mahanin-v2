@@ -127,10 +127,11 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
           <button type="button" class="row" data-app="projects">🛠️ <span class="row-label">projects</span></button>
           <button type="button" class="row" data-app="contact">✉️ <span class="row-label">say hi</span></button>
         </div>
+        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@manooi">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
         <label class="welcome-startup"><input type="checkbox" id="welcome-startup" checked> show this window at startup</label>
       </Window>
 
-      <Window id="readme" title="📝 readme.txt" x={DEFS.readme.x} y={DEFS.readme.y} w={DEFS.readme.w} h={DEFS.readme.h} z={Z.readme} open bodyClass="win-body--pad-lg">
+      <Window id="readme" title="📝 readme.txt" x={DEFS.readme.x} y={DEFS.readme.y} w={DEFS.readme.w} h={DEFS.readme.h} z={Z.readme} bodyClass="win-body--pad-lg">
         <h1 class="readme-title">HELLO, VISITOR</h1>
         <div class="readme-subtitle">SIRAWIT &ldquo;WIT&rdquo; MAHANIN · EST. 1994</div>
         <p>Consultant Developer at Thoughtworks, Bangkok. Ex&#8209;civil engineer: I used to design things that must not fall down, now I ship things that occasionally do.</p>
@@ -140,7 +141,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
           <span class="tip-arrow">&gt;</span> tip: the <strong>resume</strong> folder is the polite one.<br>
           <span class="tip-arrow">&gt;</span> everything else is the real me.<span class="blink-cursor">_</span>
         </div>
-        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@manooi">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
       </Window>
 
       <Window id="resume" title="👔 resume.doc" x={DEFS.resume.x} y={DEFS.resume.y} w={DEFS.resume.w} h={DEFS.resume.h} z={Z.resume} bodyClass="win-body--pad-lg">
@@ -315,7 +315,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', 'computer', null, 'p
       <div class="tb-sep"></div>
       <div id="taskbar-btns" class="taskbar-btns">
         <button type="button" class="task-btn" data-task="welcome">👋 welcome.exe</button>
-        <button type="button" class="task-btn" data-task="readme">📝 readme.txt</button>
       </div>
       <div class="tray">
         <span id="uptime">UPTIME —</span>
