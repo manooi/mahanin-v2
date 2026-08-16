@@ -12,25 +12,26 @@ const ogDescription = 'Consultant Developer at Thoughtworks, Bangkok. Resume, ph
 const DEFS = {
   welcome:  { x: 430, y: 80,  w: 450, h: 428 },
   readme:   { x: 236, y: 44,  w: 460, h: 396 },
-  resume:   { x: 316, y: 118, w: 452, h: 424 },
   char:     { x: 392, y: 110, w: 458, h: 452 },
-  photo:    { x: 400, y: 92,  w: 424, h: 466 },
   projects: { x: 352, y: 150, w: 452, h: 356 },
   books:    { x: 288, y: 96,  w: 424, h: 420 },
   contact:  { x: 420, y: 138, w: 408, h: 348 },
   winamp:   { x: 520, y: 430, w: 276, h: 168 },
 };
-// welcome opens above the other 8 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
-// Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer removed); winamp is new, one above the old highest static z. Gaps are harmless.
-const Z = { readme: 10, resume: 11, char: 13, photo: 14, projects: 15, books: 16, contact: 20, winamp: 21, welcome: 25 };
+// welcome opens above the other 6 (z=25) so it lands on top of readme; runtime topZ starts at 30 so later focuses still win.
+// Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume removed); winamp is new, one above the old highest static z. Gaps are harmless.
+const Z = { readme: 10, char: 13, projects: 15, books: 16, contact: 20, winamp: 21, welcome: 25 };
 
-// Apps drive the icon grid, mobile menu, and start menu.
+// Apps drive the icon grid, mobile menu, and start menu. An entry with `href` renders
+// as a link (no window) instead of a `data-app` opener. External hrefs (http…) get
+// target="_blank" + rel="noopener noreferrer"; internal ones stay same-tab.
+const linkAttrs = (href) => (href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {});
 const APPS = [
   { id: 'welcome',  icon: '👋', gridLines: ['welcome'],           mobileLabel: 'welcome',           startLabel: 'welcome' },
   { id: 'readme',   icon: '📝', gridLines: ['readme.txt'],        mobileLabel: 'readme.txt',        startLabel: 'readme.txt' },
-  { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)' },
+  { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], mobileLabel: 'resume (for HR)',   startLabel: 'resume (for HR)', href: '/resume/' },
   { id: 'char',     icon: '🍁', gridLines: ['character'],          mobileLabel: 'character',         startLabel: 'character' },
-  { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos' },
+  { id: 'photo',    icon: '📷', gridLines: ['photos'],             mobileLabel: 'photos',            startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
   { id: 'projects', icon: '🛠️', gridLines: ['projects'],           mobileLabel: 'projects',          startLabel: 'projects' },
   { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          mobileLabel: 'bookshelf',         startLabel: 'bookshelf' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             mobileLabel: 'say hi',            startLabel: 'say hi' },
@@ -54,10 +55,9 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
     <div id="desktop" class="desktop">
       <div id="icons" class="icons">
         {APPS.map((app) => (
-          <button type="button" class="icon" data-app={app.id}>
-            <span class="icon-glyph">{app.icon}</span>
-            <span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span>
-          </button>
+          app.href
+            ? <a class="icon" href={app.href} {...linkAttrs(app.href)}><span class="icon-glyph">{app.icon}</span><span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span></a>
+            : <button type="button" class="icon" data-app={app.id}><span class="icon-glyph">{app.icon}</span><span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span></button>
         ))}
       </div>
 
@@ -68,11 +68,9 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         </div>
         <div class="mobile-menu-rows">
           {APPS.filter((app) => app.mobileLabel).map((app) => (
-            <button type="button" class="m-row" data-app={app.id}>
-              <span class="m-row-icon">{app.icon}</span>
-              <span class="m-row-label">{app.mobileLabel}</span>
-              <span class="m-row-arrow">▶</span>
-            </button>
+            app.href
+              ? <a class="m-row" href={app.href} {...linkAttrs(app.href)}><span class="m-row-icon">{app.icon}</span><span class="m-row-label">{app.mobileLabel}</span><span class="m-row-arrow">▶</span></a>
+              : <button type="button" class="m-row" data-app={app.id}><span class="m-row-icon">{app.icon}</span><span class="m-row-label">{app.mobileLabel}</span><span class="m-row-arrow">▶</span></button>
           ))}
         </div>
       </div>
@@ -98,11 +96,11 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         <a href="/resume/" class="row welcome-primary">👔 <span class="row-label">open the resume</span><span class="row-badge">FOR HR &mdash; PRINTABLE PDF</span></a>
         <div class="contact-rows">
           <button type="button" class="row" data-app="readme">📝 <span class="row-label">who is this guy?</span></button>
-          <button type="button" class="row" data-app="photo">📷 <span class="row-label">photos</span></button>
+          <a href="https://unsplash.com/@souperwit" target="_blank" rel="noopener noreferrer" class="row">📷 <span class="row-label">photos</span></a>
           <button type="button" class="row" data-app="projects">🛠️ <span class="row-label">projects</span></button>
           <button type="button" class="row" data-app="contact">✉️ <span class="row-label">say hi</span></button>
         </div>
-        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@manooi">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
+        <noscript><p class="noscript-links"><a href="/resume/">Resume</a> · <a href="https://unsplash.com/@souperwit">Unsplash</a> · <a href="https://github.com/manooi">GitHub</a> · <a href="mailto:sirawit@mahanin.com">Email</a> · <a href="https://www.linkedin.com/in/sirawit-wit-mahanin-b3a42614a/">LinkedIn</a></p></noscript>
         <label class="welcome-startup"><input type="checkbox" id="welcome-startup" checked> show this window at startup</label>
       </Window>
 
@@ -116,18 +114,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
           <span class="tip-arrow">&gt;</span> tip: the <strong>resume</strong> folder is the polite one.<br>
           <span class="tip-arrow">&gt;</span> everything else is the real me.<span class="blink-cursor">_</span>
         </div>
-      </Window>
-
-      <Window id="resume" title="👔 resume.doc" x={DEFS.resume.x} y={DEFS.resume.y} w={DEFS.resume.w} h={DEFS.resume.h} z={Z.resume} bodyClass="win-body--pad-lg">
-        <div class="hr-badge">FOR HR EYES ONLY 👔</div>
-        <p>This is the serious one. Proper job titles, real dates, zero MapleStory references (one). Printable straight to PDF, Comic&nbsp;Sans free, guaranteed.</p>
-        <div class="card resume-info">
-          ROLE &nbsp;· Consultant Developer, Thoughtworks<br>
-          BEFORE · Civil engineer (buildings, briefly)<br>
-          BASED &nbsp;· Bangkok, Thailand<br>
-          STATUS · Open to a good conversation
-        </div>
-        <a href="/resume/" class="btn-9x">OPEN FULL RESUME →</a>
       </Window>
 
       <Window id="char" title="🍁 character.dat" x={DEFS.char.x} y={DEFS.char.y} w={DEFS.char.w} h={DEFS.char.h} z={Z.char} variant="char">
@@ -154,19 +140,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
           keyboard · one prime lens · library card · a mug that says nothing funny
         </div>
         <p class="char-note">Tell me your real IGN, class and world and I&rsquo;ll put them in.</p>
-      </Window>
-
-      <Window id="photo" title="📷 my pictures" x={DEFS.photo.x} y={DEFS.photo.y} w={DEFS.photo.w} h={DEFS.photo.h} z={Z.photo}>
-        <p>I point a camera at Bangkok until something looks nice. The good ones live on Unsplash and get used in places I will never visit.</p>
-        <div class="photo-grid">
-          <div class="photo-tile">street<br>photo</div>
-          <div class="photo-tile">neon<br>night</div>
-          <div class="photo-tile">portrait</div>
-          <div class="photo-tile">temple</div>
-          <div class="photo-tile">food,<br>obviously</div>
-          <div class="photo-tile">one blurry<br>cat</div>
-        </div>
-        <a href="https://unsplash.com/@manooi" class="btn-9x">UNSPLASH @manooi →</a>
       </Window>
 
       <Window id="projects" title="🛠️ projects" x={DEFS.projects.x} y={DEFS.projects.y} w={DEFS.projects.w} h={DEFS.projects.h} z={Z.projects}>
@@ -239,7 +212,9 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
         {START_ORDER.map((id) => (
           id === null
             ? <div class="menu-sep"></div>
-            : <button type="button" class="start-item" data-app={id}><span class="start-item-icon">{appsById[id].icon}</span>{appsById[id].startLabel}</button>
+            : appsById[id].href
+              ? <a class="start-item" href={appsById[id].href} {...linkAttrs(appsById[id].href)}><span class="start-item-icon">{appsById[id].icon}</span>{appsById[id].startLabel}</a>
+              : <button type="button" class="start-item" data-app={id}><span class="start-item-icon">{appsById[id].icon}</span>{appsById[id].startLabel}</button>
         ))}
         <button type="button" class="start-item start-item--danger" data-action="shutdown"><span class="start-item-icon">⏻</span>shut down...</button>
       </div>
@@ -454,9 +429,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .tip-arrow { color: #8a3b12; }
   .noscript-links { margin: 14px 0 0; font-size: 11.5px; }
 
-  .hr-badge { display: inline-block; background: #e07a3f; color: #fff; font: 400 9.5px/1 Silkscreen,monospace; letter-spacing: .5px; padding: 6px 8px; margin-bottom: 12px; box-shadow: 2px 2px 0 rgba(0,0,0,.3); }
-  .resume-info { font-size: 11.5px; line-height: 1.9; margin-bottom: 14px; }
-
   .char-top { display: flex; gap: 12px; margin-bottom: 12px; }
   .char-sprite { width: 84px; height: 104px; flex: none; background: repeating-linear-gradient(135deg,#e3c6d6 0 6px,#f0dae6 6px 12px); border: 2px solid; border-color: #a8788f #fff #fff #a8788f; display: grid; place-items: center; text-align: center; font: 400 8px/1.4 'IBM Plex Mono',monospace; color: #7a5266; padding: 4px; }
   .char-info { flex: 1; min-width: 0; }
@@ -474,9 +446,6 @@ const START_ORDER = ['welcome', 'readme', 'resume', 'char', null, 'photo', 'proj
   .char-equip { margin-top: 12px; padding: 9px 11px; font-size: 11.5px; }
   .char-equip-label { font: 400 9px Silkscreen,monospace; color: #7a2f52; margin-bottom: 6px; }
   .char-note { margin: 11px 0 0; font-size: 11px; color: #7a5266; }
-
-  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
-  .photo-tile { aspect-ratio: 1; background: repeating-linear-gradient(135deg,#cfc7b6 0 6px,#e3dccd 6px 12px); border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; display: grid; place-items: center; text-align: center; font: 400 8px/1.4 'IBM Plex Mono',monospace; color: #6b6459; padding: 4px; }
 
   .project-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
   .project-row { display: flex; gap: 10px; align-items: baseline; background: #fffdf7; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; padding: 8px 10px; }
