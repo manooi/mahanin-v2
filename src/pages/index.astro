@@ -248,6 +248,7 @@ const SYSMON_ROWS = [
   @keyframes doodle-nudge { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(4px,3px); } }
   /* steps() keeps the desktop Refresh blink chunky rather than a smooth fade. */
   @keyframes icons-repaint { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes net-blink { 0%, 18% { opacity: .3; } 19%, 100% { opacity: 1; } }
   .blink-cursor { animation: blink 1.1s steps(1) infinite; }
 
   /* ---------- root / wallpaper / desktop ---------- */
@@ -518,6 +519,14 @@ const SYSMON_ROWS = [
   .task-btn.is-min { background: #d8d2c4; border-color: #fffdf7 #4a453c #4a453c #fffdf7; }
   .tray { display: flex; align-items: center; gap: 8px; background: #cfc7b6; border: 2px solid; border-color: #8a8275 #fffdf7 #fffdf7 #8a8275; padding: 6px 10px; flex: none; }
   .tray-net { display: flex; align-items: center; flex: none; }
+  /* The Win95 tray network icon flickered its two screens whenever packets moved, the
+     back one and the front one out of phase. steps(1) keeps the flash hard-edged rather
+     than a fade, and dropping opacity lets the silver bezel show through as a pale
+     flash instead of a colour swap. */
+  @media (prefers-reduced-motion: no-preference) {
+    .tray-net-screen { animation: net-blink 1.6s steps(1) infinite; }
+    .tray-net-screen--front { animation-delay: .8s; }
+  }
   /* crispEdges keeps the 16×16 grid from anti-aliasing into mush at 15px. */
   .tray-net svg { display: block; width: 15px; height: 15px; shape-rendering: crispEdges; }
   .tray #uptime { font: 400 9.5px Silkscreen,monospace; color: #4a453c; }
@@ -547,7 +556,12 @@ const SYSMON_ROWS = [
   }
 
   @media (max-width: 759px) {
-    .widgets, .tray { display: none; }
+    .widgets { display: none; }
+    /* The tray survives on mobile now that uptime moved into SYSTEM MONITOR — it is
+       just the network sprite and the clock, so it fits. Tightened up, and the task
+       button strip is told it may shrink below its content to make room. */
+    .tray { gap: 6px; padding: 6px 8px; }
+    .taskbar-btns { min-width: 0; }
     /* Same icon grid as the desktop, just unpinned: it drops out of its absolute
        corner into normal document order, spreads to fill the width, and .desktop
        scrolls so the bio flows in underneath. One DOM, two breakpoints — there is
