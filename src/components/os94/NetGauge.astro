@@ -2,33 +2,41 @@
 interface Props {
   ping?: string;
   conn?: string;
-  up?: string;
   down?: string;
-  upFill?: number;
+  up?: string;
   downFill?: number;
+  upFill?: number;
 }
 
-const { ping = '49ms', conn = '60', up = '240K', down = '75.9K', upFill = 60, downFill = 54 } = Astro.props;
+const { ping = '49ms', conn = '60', down = '300K', up = '72.4K', downFill = 60, upFill = 14 } = Astro.props;
 ---
-{/* cFosSpeed's desktop gauge, redrawn flat: latency and connection count on top, then an
-    upload bar and a download bar. Values are server-rendered so the widget reads correctly
-    with JS off — os94.js walks them from there. Bar length is the --fill custom property,
-    the same "geometry as a custom property" rule the windows and sticky notes follow. */}
-<div class="netgauge" title="traffic monitor">
+{/* cFosSpeed's desktop gauge, redrawn flat: latency and connection count on top, then a
+    download bar and an upload bar. Download leads because a real link is asymmetric — it
+    is the bigger number nearly always, and the reference gadget likewise puts its long
+    orange bar above its short green one. Both bars share one scale (NET_MAX in os94.js),
+    which is the whole point: on per-bar scales a 300K download and a 70K upload would
+    draw the same length and the asymmetry would vanish. Values are server-rendered so the
+    widget reads correctly with JS off — os94.js walks them from there. Bar length is the
+    --fill custom property, the same "geometry as a custom property" rule the windows and
+    sticky notes follow.
+
+    It is a button, not a div: like taskman's taskbar menu, this widget is the one and
+    only opener for its window (netmon) — nothing in APPS reaches it. */}
+<button type="button" class="netgauge" data-app="netmon" title="traffic monitor">
   <div class="netgauge-head">
-    <svg class="netgauge-glyph" viewBox="0 0 9 8" fill="none" aria-hidden="true"><polygon points="2,0 4,3 3,3 3,8 1,8 1,3 0,3" fill="#e8801f" /><polygon points="7,8 9,5 8,5 8,0 6,0 6,5 5,5" fill="#57c04a" /></svg>
+    <svg class="netgauge-glyph" viewBox="0 0 9 8" fill="none" aria-hidden="true"><polygon points="1,0 3,0 3,5 4,5 2,8 0,5 1,5" fill="#e8801f" /><polygon points="7,0 9,3 8,3 8,8 6,8 6,3 5,3" fill="#57c04a" /></svg>
     <span class="netgauge-ping" id="net-ping">{ping}</span>
     <svg class="netgauge-glyph netgauge-glyph--conn" viewBox="0 0 8 8" fill="none" aria-hidden="true"><rect x="0" y="0" width="3" height="3" fill="#6aa9f0" /><rect x="5" y="1" width="3" height="3" fill="#8ec2f7" /><rect x="2" y="5" width="3" height="3" fill="#4b8ad6" /></svg>
     <span class="netgauge-conn" id="net-conn">{conn}</span>
-  </div>
-  <div class="netgauge-row">
-    <span class="netgauge-swatch netgauge-swatch--up"></span>
-    <span class="netgauge-track"><span class="netgauge-fill netgauge-fill--up" id="net-up-bar" style={`--fill: ${upFill}%`}></span></span>
-    <span class="netgauge-val" id="net-up">{up}</span>
   </div>
   <div class="netgauge-row">
     <span class="netgauge-swatch netgauge-swatch--down"></span>
     <span class="netgauge-track"><span class="netgauge-fill netgauge-fill--down" id="net-down-bar" style={`--fill: ${downFill}%`}></span></span>
     <span class="netgauge-val" id="net-down">{down}</span>
   </div>
-</div>
+  <div class="netgauge-row">
+    <span class="netgauge-swatch netgauge-swatch--up"></span>
+    <span class="netgauge-track"><span class="netgauge-fill netgauge-fill--up" id="net-up-bar" style={`--fill: ${upFill}%`}></span></span>
+    <span class="netgauge-val" id="net-up">{up}</span>
+  </div>
+</button>

@@ -140,6 +140,14 @@ const SYSMON_ROWS = [
         <button type="button" class="btn-9x" data-action="close">FAIR ENOUGH</button>
       </Window>
 
+      <Window id="netmon" title="📶 cfosspeed.exe" x={DEFS.netmon.x} y={DEFS.netmon.y} w={DEFS.netmon.w} h={DEFS.netmon.h} z={Z.netmon}>
+        <div class="sec-label">TRAFFIC MONITOR</div>
+        <p>You knew this program.</p>
+        <p>I installed cFosSpeed on every computer I owned, certain that watching the traffic would make it faster. It never did. I kept it running anyway.</p>
+        <p>The bars in the corner are invented. There is nothing here to measure.</p>
+        <button type="button" class="btn-9x" data-action="close">STILL FASTER</button>
+      </Window>
+
       <Window id="winamp" title="🎵 winamp" x={DEFS.winamp.x} y={DEFS.winamp.y} w={DEFS.winamp.w} h={DEFS.winamp.h} z={Z.winamp} bodyClass="win-body--flush">
         <div class="winamp-head">
           <span class="winamp-head-label">NOW PLAYING</span>
@@ -357,7 +365,12 @@ const SYSMON_ROWS = [
   /* cFosSpeed cosplay. No title bar — the reference gadget has none. pointer-events: auto
      is the .widgets opt-in (invariant 8); right-click still reaches the desktop menu,
      since that handler matches on closest('.desktop') rather than on the event target. */
-  .netgauge { position: absolute; right: 20px; bottom: 16px; width: 196px; padding: 8px 10px 9px; background: rgba(6,42,38,.6); border: 1px solid rgba(255,255,255,.22); pointer-events: auto; }
+  .netgauge {
+    position: absolute; right: 20px; bottom: 16px; width: 196px; padding: 8px 10px 9px;
+    background: rgba(6,42,38,.6); border: 1px solid rgba(255,255,255,.22); pointer-events: auto;
+    display: block; text-align: left; font: inherit; color: inherit; cursor: pointer; touch-action: manipulation;
+  }
+  .netgauge:hover { background: rgba(6,42,38,.86); border-color: #f2c14b; }
   .netgauge-head { display: flex; align-items: center; gap: 6px; }
   .netgauge-glyph { width: 9px; height: 8px; flex: none; shape-rendering: crispEdges; }
   .netgauge-glyph--conn { width: 8px; }
@@ -365,14 +378,14 @@ const SYSMON_ROWS = [
   .netgauge-conn { font: 600 11px/1 'IBM Plex Mono',monospace; color: #dff5f0; }
   .netgauge-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
   .netgauge-swatch { width: 7px; height: 7px; flex: none; }
-  .netgauge-swatch--up { background: #e8801f; }
-  .netgauge-swatch--down { background: #57c04a; }
+  .netgauge-swatch--down { background: #e8801f; }
+  .netgauge-swatch--up { background: #57c04a; }
   .netgauge-track { flex: 1; height: 11px; background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.16); }
   /* Width is the only thing JS touches. The transition is safe without a reduced-motion
      guard because netTick() stops writing --fill under reduce, so nothing ever moves. */
   .netgauge-fill { display: block; height: 100%; width: var(--fill, 0%); transition: width .45s linear; }
-  .netgauge-fill--up { background: #e8801f; }
-  .netgauge-fill--down { background: #57c04a; }
+  .netgauge-fill--down { background: #e8801f; }
+  .netgauge-fill--up { background: #57c04a; }
   .netgauge-val { width: 46px; text-align: right; font: 600 11px/1 'IBM Plex Mono',monospace; color: #dff5f0; }
 
   /* ---------- window chrome (Window.astro) ---------- */

@@ -13,16 +13,18 @@ export const DEFS = {
   projects: { x: 352, y: 150, w: 452, h: 356 },
   winamp:   { x: 520, y: 430, w: 276, h: 168 },
   contact:  { x: 420, y: 138, w: 408, h: 243 },
-  // taskman has no APPS entry either, but it is NOT parked: the taskbar's right-click
-  // menu is its one and only opener. Deleting that menu strands it.
+  // taskman and netmon have no APPS entry either, but neither is parked: each has exactly
+  // one bespoke opener elsewhere in the page — the taskbar's right-click menu for taskman,
+  // the .netgauge widget for netmon. Delete that opener and the window is stranded.
   taskman:  { x: 360, y: 190, w: 396, h: 236 },
   recycle:  { x: 300, y: 120, w: 428, h: 322 },
+  netmon:   { x: 330, y: 150, w: 424, h: 306 },
 };
 
 // Static z only orders the parked windows against each other; nothing opens on load. Runtime topZ starts at 30 so every focus still wins.
 // readme is no longer a window — its content now renders directly on the desktop (.desktop-readme).
 // Z values kept identical to the pre-removal numbering for survivors (life/now/guest/computer/photo/resume/books removed); winamp is new, one above the old highest static z. Gaps are harmless.
-export const Z = { char: 13, projects: 15, contact: 20, winamp: 21, taskman: 22, recycle: 23, welcome: 25 };
+export const Z = { char: 13, projects: 15, contact: 20, winamp: 21, taskman: 22, recycle: 23, netmon: 24, welcome: 25 };
 
 // External hrefs (http…) get target="_blank" + rel="noopener noreferrer" by default;
 // internal ones stay same-tab unless the entry sets `newTab: true` (resume does — the
