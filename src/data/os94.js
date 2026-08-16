@@ -40,7 +40,7 @@ export const linkAttrs = (app) => ((app.newTab ?? app.href.startsWith('http')) ?
 export const APPS = [
   { id: 'resume',   icon: '👔', gridLines: ['resume', '(for HR)'], startLabel: 'resume (for HR)', href: '/resume/', newTab: true, doodle: 'HR start here' },
   { id: 'photo',    icon: '📷', gridLines: ['photos'],             startLabel: 'photos',          href: 'https://unsplash.com/@souperwit' },
-  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
+  { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          startLabel: 'bookshelf',       href: 'https://www.goodreads.com/review/list/177765370?shelf=read' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             startLabel: 'say hi' },
   { id: 'recycle',  icon: '🗑️', gridLines: ['recycle bin'],        startLabel: 'recycle bin' },
 ];
