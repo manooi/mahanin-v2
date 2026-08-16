@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const { title, description, canonical, ogTitle = title, ogDescription = description } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{title}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content={description}>
+  <meta name="author" content="Sirawit Mahanin">
+  <link rel="canonical" href={canonical}>
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={ogDescription}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content="https://mahanin.com/assets/profile.jpg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+  <slot />
+</body>
+</html>
