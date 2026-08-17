@@ -10,23 +10,16 @@ const ogDescription = 'Consultant Developer at Thoughtworks. Full stack (TypeScr
 
 <Base title={title} description={description} canonical={canonical} ogTitle={ogTitle} ogDescription={ogDescription}>
   <style is:global>
-    /* Borderless: plain white page, centered content column */
+    /* Borderless: plain white page, fixed-width centered content column */
     .resume-box {
-        margin: 0 18% 2rem;
+        max-width: 900px;
+        margin: 0 auto 2rem;
         padding: 0.5rem 2.5rem 2rem;
-    }
-
-    /* Anything less than this */
-    @media (max-width: 1300px) {
-        .resume-box {
-            margin-left: 5%;
-            margin-right: 5%;
-        }
     }
 
     @media (max-width: 640px) {
         .resume-box {
-            margin: 0 3% 1rem;
+            margin-bottom: 1rem;
             padding: 0.5rem 1.25rem 1.25rem;
         }
     }
