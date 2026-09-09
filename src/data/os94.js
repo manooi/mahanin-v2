@@ -1,6 +1,6 @@
 // Config for the OS94 hub: window geometry, stacking order, and the app list.
-// index.astro and the os94 components import from here. `src/scripts/os94/index.js`
-// (the runtime) deliberately does NOT — it reads the same numbers back off the DOM as CSS
+// index.astro and the os94 components import from here. `src/scripts/os94.js` (the
+// runtime) deliberately does NOT — it reads the same numbers back off the DOM as CSS
 // custom properties, so the coordinates still live in exactly one place.
 
 // Window geometry — single source of truth (design's DEFS table). Never duplicate into JS.

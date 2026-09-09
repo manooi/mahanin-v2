@@ -24,7 +24,7 @@ const style = [
 ---
 {/* A printed photo lying on the desktop, draggable. It opts into pointer-events (invariant
     8) because it is the one piece of scenery you can pick up. The sides passed above hold
-    it until it is first dragged, at which point os94/index.js writes --x/--y and .is-dragged
+    it until it is first dragged, at which point os94.js writes --x/--y and .is-dragged
     switches it to left/top — anchoring to the right edge is what keeps it in the corner on
     any viewport, but you cannot add a drag delta to `right` and have it move the way the
     cursor does. draggable="false" is load-bearing: without it the browser's own image drag

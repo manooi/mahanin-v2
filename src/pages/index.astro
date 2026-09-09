@@ -18,7 +18,7 @@ const canonical = 'https://mahanin.com/';
 const ogTitle = 'Sirawit Mahanin';
 const ogDescription = 'Consultant Developer at Thoughtworks, Bangkok. Resume, photography, and projects.';
 
-// UPTIME is filled in by tick() in os94/index.js; the id is the contract, the — is the no-JS state.
+// UPTIME is filled in by tick() in os94.js; the id is the contract, the — is the no-JS state.
 const SYSMON_ROWS = [
   { label: 'HOST', value: 'SIRAWIT MAHANIN' },
   { label: 'LOC', value: 'BANGKOK, TH 🇹🇭' },
@@ -128,7 +128,7 @@ const SYSMON_ROWS = [
       </Window>
 
       <!-- Every row's punchline lives in its own data-note, so all the copy stays here
-           in the markup and os94/index.js only has to move a string into #bin-status. -->
+           in the markup and os94.js only has to move a string into #bin-status. -->
       <Window id="recycle" title="🗑️ recycle bin" x={DEFS.recycle.x} y={DEFS.recycle.y} w={DEFS.recycle.w} h={DEFS.recycle.h} z={Z.recycle} bodyClass="win-body--flush-x">
         <div class="bin-list">
           <button type="button" class="bin-item" data-action="bin" data-note="Three files. All of them are photographs of my cat. You looked, though. That's the part worth sitting with."><span class="bin-icon">📁</span><span class="bin-name">xxx</span><span class="bin-meta">3 items</span></button>
@@ -230,7 +230,7 @@ const SYSMON_ROWS = [
       </div>
     </div>
 
-    <script src="../scripts/os94/index.js" type="module"></script>
+    <script src="../scripts/os94.js"></script>
   </main>
 </Base>
 
@@ -352,7 +352,7 @@ const SYSMON_ROWS = [
   .sticky-note-label { font: 400 10px/1.4 Silkscreen,monospace; color: #8a6f0e; margin-bottom: 7px; }
   .sticky-note-sign { margin-top: 8px; font-size: 10.5px; color: #8a6f0e; }
   /* The one thing on the desktop you can pick up. Anchored by whichever sides the call
-     site passes until the first drag, then os94/index.js writes --x/--y and .is-dragged flips it
+     site passes until the first drag, then os94.js writes --x/--y and .is-dragged flips it
      to left/top — a right-anchored element cannot take a cursor delta. touch-action: none
      keeps a touch-drag from scrolling the page instead of moving the photo. */
   .desk-photo {

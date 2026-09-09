@@ -13,10 +13,10 @@ const { ping = '49ms', conn = '60', down = '300K', up = '72.4K', downFill = 60, 
 {/* cFosSpeed's desktop gauge, redrawn flat: latency and connection count on top, then a
     download bar and an upload bar. Download leads because a real link is asymmetric — it
     is the bigger number nearly always, and the reference gadget likewise puts its long
-    orange bar above its short green one. Both bars share one scale (NET_MAX in os94/index.js),
+    orange bar above its short green one. Both bars share one scale (NET_MAX in os94.js),
     which is the whole point: on per-bar scales a 300K download and a 70K upload would
     draw the same length and the asymmetry would vanish. Values are server-rendered so the
-    widget reads correctly with JS off — os94/index.js walks them from there. Bar length is the
+    widget reads correctly with JS off — os94.js walks them from there. Bar length is the
     --fill custom property, the same "geometry as a custom property" rule the windows and
     sticky notes follow.
 
