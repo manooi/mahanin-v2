@@ -333,8 +333,11 @@ const SYSMON_ROWS = [
     top: var(--top, auto); right: var(--right, auto); bottom: var(--bottom, auto); left: var(--left, auto);
     width: var(--w, 180px); padding: 13px 14px 15px;
     background: #f2e27a; box-shadow: 3px 3px 0 rgba(0,0,0,.28); transform: rotate(var(--rot, -2.2deg));
-    font: 400 12px/1.55 'IBM Plex Mono',monospace; color: #4a3d05; pointer-events: auto;
+    font: 400 12px/1.55 'IBM Plex Mono',monospace; color: #4a3d05;
+    pointer-events: auto; cursor: grab; touch-action: none; user-select: none;
   }
+  .sticky-note.is-dragged { top: var(--y); left: var(--x); right: auto; bottom: auto; }
+  .sticky-note:active { cursor: grabbing; }
   /* Same shape as a real .icon so it reads as a shortcut, then faded down to a ghost.
      No :hover, no cursor, no pointer-events opt-in — it is scenery, not an app. */
   .ghost-icon {
