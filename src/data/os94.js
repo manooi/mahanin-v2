@@ -45,10 +45,11 @@ export const APPS = [
   { id: 'books',    icon: '📚', gridLines: ['bookshelf'],          startLabel: 'bookshelf',       href: 'https://www.goodreads.com/user/show/177765370-sirawit-mahanin' },
   { id: 'contact',  icon: '✉️', gridLines: ['say hi'],             startLabel: 'say hi' },
   { id: 'recycle',  icon: '🗑️', gridLines: ['recycle bin'],        startLabel: 'recycle bin' },
+  { id: 'meysure',  iconSrc: '/assets/icon/meysure.svg', gridLines: ['Meysure'], startLabel: 'Meysure', href: 'https://meysure.com/', separate: true, doodle: 'my construction SaaS' },
 ];
 
 export const appsById = Object.fromEntries(APPS.map((app) => [app.id, app]));
 
 // Start menu mirrors APPS order; null entries are separators before shutdown.
 // recycle rides in the same group as contact rather than getting its own separator.
-export const START_ORDER = ['resume', null, 'photo', 'books', 'contact', 'recycle', null];
+export const START_ORDER = ['resume', null, 'photo', 'books', 'contact', 'recycle', null, 'meysure', null];

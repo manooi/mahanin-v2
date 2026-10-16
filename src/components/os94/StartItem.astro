@@ -12,4 +12,4 @@ const { app } = Astro.props;
 const Tag = app.href ? 'a' : 'button';
 const attrs = app.href ? { href: app.href, ...linkAttrs(app) } : { type: 'button', 'data-app': app.id };
 ---
-<Tag class="start-item" {...attrs}><span class="start-item-icon">{app.icon}</span>{app.startLabel}</Tag>
+<Tag class="start-item" {...attrs}><span class="start-item-icon">{app.iconSrc ? <img src={app.iconSrc} alt="" width="16" height="16" /> : app.icon}</span>{app.startLabel}</Tag>

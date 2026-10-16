@@ -14,4 +14,4 @@ const { app } = Astro.props;
 const Tag = app.href ? 'a' : 'button';
 const attrs = app.href ? { href: app.href, ...linkAttrs(app) } : { type: 'button', 'data-app': app.id };
 ---
-<Tag class="icon" {...attrs}><span class="icon-glyph">{app.icon}</span><span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span>{app.doodle && <DoodleArrow text={app.doodle} />}</Tag>
+<Tag class:list={['icon', { 'icon--separate': app.separate }]} {...attrs}><span class="icon-glyph">{app.iconSrc ? <img class="icon-image" src={app.iconSrc} alt="" width="29" height="29" /> : app.icon}</span><span class="icon-label">{app.gridLines.length > 1 ? <Fragment>{app.gridLines[0]}<br />{app.gridLines[1]}</Fragment> : app.gridLines[0]}</span>{app.doodle && <DoodleArrow text={app.doodle} />}</Tag>

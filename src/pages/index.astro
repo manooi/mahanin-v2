@@ -293,7 +293,9 @@ const SYSMON_ROWS = [
     touch-action: manipulation;
   }
   .icon:hover { background: rgba(255,255,255,.14); border: 1px dotted rgba(255,255,255,.55); }
+  .icon--separate { margin-top: 24px; }
   .icon-glyph { font-size: 29px; line-height: 1; filter: drop-shadow(2px 2px 0 rgba(0,0,0,.35)); }
+  .icon-image { display: block; width: 29px; height: 29px; }
   .icon-label { font: 400 9.5px/1.35 Silkscreen,monospace; color: #fff; text-align: center; text-shadow: 1px 1px 0 rgba(0,0,0,.5); }
 
   /* Doodle is anchored to its icon (position: relative above), never to grid maths —
@@ -672,6 +674,7 @@ const SYSMON_ROWS = [
     /* Roomier hit areas than the 88px desktop cell: ~74px tall, comfortably past
        the 44px touch-target floor. */
     .icon { padding: 12px 4px 10px; }
+    .icon--separate { margin-top: 0; margin-left: 16px; }
     .icon-glyph { font-size: 33px; }
     .icon-label { font-size: 10px; }
     /* Bin rows are a 30px hit area on the desktop — too tight for a thumb. */

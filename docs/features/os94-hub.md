@@ -66,7 +66,7 @@ object and picks its tag dynamically: entries with an `href` render an `<a>` (pl
 ### `DoodleArrow.astro`
 The hand-drawn arrow + scrawl (`text` prop), used by `AppIcon`.
 
-Driven by a `doodle` string on an `APPS` entry (only `resume` has one) and rendered *inside*
+Driven by a `doodle` string on an `APPS` entry (`resume` and `meysure` have one) and rendered *inside*
 the icon `<a>`, positioned against `.icon { position: relative }` — never against grid
 coordinates, since icon heights vary with label line count. It is `pointer-events: none` so
 clicks fall through to the icon link, and `display: none` below 1000px, where
